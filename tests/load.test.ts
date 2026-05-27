@@ -20,4 +20,9 @@ describe('loadConfig', () => {
     await expect(loadConfig(path.join(here, 'fixtures/invalid.config.ts')))
       .rejects.toThrow(/tilt\.y/);
   });
+
+  it('throws a friendly error when no config file exists', async () => {
+    await expect(loadConfig(path.join(here, 'fixtures/does-not-exist.config.ts')))
+      .rejects.toThrow(/No config found/);
+  });
 });

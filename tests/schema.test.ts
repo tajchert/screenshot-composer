@@ -44,4 +44,45 @@ describe('ConfigSchema', () => {
     bad.slots = Array.from({ length: 9 }, (_, i) => ({ ...valid.slots[0], id: `s${i}` }));
     expect(ConfigSchema.safeParse(bad).success).toBe(false);
   });
+
+  it('rejects a gradient background with fewer than 2 stops', () => {
+    const bad = structuredClone(valid);
+    bad.theme.background = { type: 'gradient', stops: ['#000'] } as any;
+    const res = ConfigSchema.safeParse(bad);
+    expect(res.success).toBe(false);
+  });
+
+  it('rejects a solid background with no color', () => {
+    const bad = structuredClone(valid);
+    bad.theme.background = { type: 'solid' } as any;
+    expect(ConfigSchema.safeParse(bad).success).toBe(false);
+  });
+
+  it('accepts a solid background with a color', () => {
+    const ok = structuredClone(valid);
+    ok.theme.background = { type: 'solid', color: '#101828' } as any;
+    expect(ConfigSchema.safeParse(ok).success).toBe(true);
+  });
+
+  it('rejects an invalid CSS color in the palette', () => {
+    const bad = structuredClone(valid);
+    bad.theme.palette.fg = 'not a color!!';
+    expect(ConfigSchema.safeParse(bad).success).toBe(false);
+  });
+
+  it('rejects an empty rgb() color', () => {
+    const bad = structuredClone(valid);
+    bad.theme.palette.fg = 'rgb()';
+    expect(ConfigSchema.safeParse(bad).success).toBe(false);
+  });
+
+  it('rejects defaultLocale that is not in locales', () => {
+    const bad = structuredClone(valid);
+    bad.defaultLocale = 'fr';
+    const res = ConfigSchema.safeParse(bad);
+    expect(res.success).toBe(false);
+    if (!res.success) {
+      expect(res.error.issues.some((i) => i.path.join('.') === 'defaultLocale')).toBe(true);
+    }
+  });
 });

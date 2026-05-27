@@ -16,6 +16,8 @@
 
 **Out of scope (later milestones):** caching behavior itself (M6), the template contract/`meta.ts`/resolver (M3), additional frames + project-local frames (M4), i18n/fonts (M5), the visual editor, Fastlane import (M6), npm/Homebrew/Docker packaging (M7).
 
+**Deferred to M7 (raised in M2 review):** `version.ts` and `cli.ts` read `../package.json` via `createRequire(import.meta.url)`, which is correct in dev/test but assumes a `package.json` one level above the module — the M7 build/packaging step must guarantee that layout (or switch to a JSON import / generated version constant).
+
 ---
 
 ## File Structure

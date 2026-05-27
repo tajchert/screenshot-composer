@@ -47,4 +47,7 @@ async function guard(fn: () => Promise<void>): Promise<void> {
   }
 }
 
-program.parseAsync(process.argv);
+program.parseAsync(process.argv).catch((err) => {
+  console.error((err as Error).message);
+  process.exit(exitCodeFor(err));
+});

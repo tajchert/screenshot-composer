@@ -34,7 +34,7 @@ export async function renderSlot(
 
     // Wait for fonts and images via a string expression to avoid esbuild __name injection.
     await page.waitForFunction('document.fonts.ready.then(() => true)');
-    await page.waitForFunction('window.__READY__ === true', undefined, { timeout: 10_000 });
+    await page.waitForFunction('window.__READY__ === true && Array.from(document.images).every((i) => i.complete)', undefined, { timeout: 10_000 });
 
     const png = await page.screenshot({ type: 'png', fullPage: false });
     return await enforceConstraints(png, slotId);

@@ -42,6 +42,7 @@ describe('CLI M2 smoke', () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'sc-m2-clean-'));
     const res = await cli(['clean', '--cache'], root);
     expect(res.exitCode).toBe(0);
+    expect(res.stdout).toContain('Nothing to clean.');
   });
 
   it('generate with no config exits 1 with a friendly message', async () => {

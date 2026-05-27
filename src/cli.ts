@@ -54,8 +54,8 @@ program
 
 program
   .command('clean')
-  .description('Remove cached artifacts (downloaded Chromium and the project .cache)')
-  .option('--cache', 'remove only the project .cache, leave Chromium')
+  .description('Remove cached artifacts: the downloaded Chromium and the project .cache (use --cache to limit to the project cache)')
+  .option('--cache', 'remove only the project .cache (keep the downloaded Chromium)')
   .action(async (opts: { cache?: boolean }) => {
     await guard(async () => {
       const { removed } = await runClean(process.cwd(), { cache: opts.cache });

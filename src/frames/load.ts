@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { promises as fs } from 'node:fs';
+import { promises as fs, existsSync } from 'node:fs';
 
 const FRAMES_DIR = path.dirname(fileURLToPath(import.meta.url));
 
@@ -17,7 +17,11 @@ export interface FrameManifest {
 
 export async function listFrames(): Promise<string[]> {
   const entries = await fs.readdir(FRAMES_DIR, { withFileTypes: true });
-  return entries.filter((e) => e.isDirectory()).map((e) => e.name).sort();
+  return entries
+    .filter((e) => e.isDirectory())
+    .filter((e) => existsSync(path.join(FRAMES_DIR, e.name, 'manifest.json')))
+    .map((e) => e.name)
+    .sort();
 }
 
 export async function loadFrame(
@@ -32,7 +36,11 @@ export async function loadFrame(
     throw new Error(`Unknown frame: '${id}'`);
   }
   const manifest = JSON.parse(raw) as FrameManifest;
-  const chosen = color && manifest.files[color] ? color : manifest.colors[0];
+  const resolved = color && manifest.files[color] ? color : manifest.colors?.[0];
+  if (!resolved || !manifest.files[resolved]) {
+    throw new Error(`Frame '${id}' has no usable color/svg files`);
+  }
+  const chosen = resolved;
   const svg = await fs.readFile(path.join(dir, manifest.files[chosen]), 'utf8');
   return { manifest, svg, color: chosen };
 }

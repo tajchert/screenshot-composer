@@ -37,4 +37,10 @@ describe('bold-headline renderHtml', () => {
     expect(html).toContain('rotateY(-18deg)');
     expect(html).toContain('perspective(2000px)');
   });
+
+  it('escapes special characters in the headline', () => {
+    const html = renderHtml({ ...props, headline: '<b>Fast</b> & "cheap"' });
+    expect(html).toContain('&lt;b&gt;Fast&lt;/b&gt; &amp; &quot;cheap&quot;');
+    expect(html).not.toContain('<b>Fast</b>');
+  });
 });

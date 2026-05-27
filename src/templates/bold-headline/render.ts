@@ -48,6 +48,7 @@ export function renderHtml(props: TemplateProps): string {
 <html dir="ltr">
 <head>
 <meta charset="utf-8">
+<!-- Numeric layout values are Zod-validated finite numbers; theme color/font strings are author-controlled and will be validated against a CSS-color pattern in Milestone 2 (see plan "Milestone 2 backlog"). -->
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { width: ${width}px; height: ${height}px; }
@@ -93,7 +94,8 @@ export function renderHtml(props: TemplateProps): string {
   <div class="headline">${escapeHtml(headline)}</div>
   <div class="stage">
     <div class="device">
-      <img class="screen" src="${screenshotUrl}" alt="">
+      <img class="screen" src="${escapeHtml(screenshotUrl)}" alt="">
+      <!-- frame.svg is a trusted, bundled SVG asset -->
       <div class="frame">${frame.svg}</div>
     </div>
   </div>

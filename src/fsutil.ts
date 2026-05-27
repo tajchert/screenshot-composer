@@ -15,7 +15,11 @@ export async function dirSize(target: string): Promise<number> {
     if (entry.isDirectory()) {
       total += await dirSize(full);
     } else if (entry.isFile()) {
-      total += (await fs.stat(full)).size;
+      try {
+        total += (await fs.stat(full)).size;
+      } catch {
+        // file vanished mid-scan or is a broken symlink — skip it
+      }
     }
   }
   return total;

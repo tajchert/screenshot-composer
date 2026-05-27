@@ -1,6 +1,5 @@
 import { promises as fs, existsSync } from 'node:fs';
-import { projectPaths } from '../paths.js';
-import { CHROMIUM_DIR } from '../paths.js';
+import { projectPaths, CHROMIUM_DIR } from '../paths.js';
 import { dirSize } from '../fsutil.js';
 
 export interface CleanOptions {

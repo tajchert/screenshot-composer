@@ -32,9 +32,21 @@ describe('runDoctor', () => {
       path.join(here, 'fixtures/invalid.config.ts'),
       path.join(base, 'screenshot-composer.config.ts'),
     );
-    const { checks, ok } = await runDoctor(root);
+    const fakeChromium = await fs.mkdtemp(path.join(os.tmpdir(), 'sc-doctor-chrome-'));
+    await fs.mkdir(path.join(fakeChromium, 'chromium-1148'));
+    const { checks, ok } = await runDoctor(root, fakeChromium);
+    const chromium = checks.find((c) => c.name.toLowerCase().includes('chromium'));
+    expect(chromium?.ok).toBe(true);
     const cfg = checks.find((c) => c.name.toLowerCase().includes('config'));
     expect(cfg?.ok).toBe(false);
     expect(ok).toBe(false);
+  });
+
+  it('reports Chromium missing when the chromium dir is empty', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'sc-doctor-nochrome-'));
+    const emptyChromium = await fs.mkdtemp(path.join(os.tmpdir(), 'sc-doctor-emptychrome-'));
+    const { checks } = await runDoctor(root, emptyChromium);
+    const chromium = checks.find((c) => c.name.toLowerCase().includes('chromium'));
+    expect(chromium?.ok).toBe(false);
   });
 });

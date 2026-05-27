@@ -1,0 +1,10 @@
+{
+  "id": "pixel-9",
+  "displayName": "Pixel 9",
+  "manufacturer": "Google",
+  "colors": ["obsidian"],
+  "intrinsic": { "width": 800, "height": 1700 },
+  "screen": { "x": 28, "y": 30, "width": 744, "height": 1640, "radius": 44 },
+  "shadow": { "x": 0, "y": 24, "blur": 64, "color": "rgba(0,0,0,0.18)" },
+  "files": { "obsidian": "obsidian.svg" }
+}

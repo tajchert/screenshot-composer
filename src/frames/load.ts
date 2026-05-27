@@ -1,0 +1,38 @@
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+import { promises as fs } from 'node:fs';
+
+const FRAMES_DIR = path.dirname(fileURLToPath(import.meta.url));
+
+export interface FrameManifest {
+  id: string;
+  displayName: string;
+  manufacturer: string;
+  colors: string[];
+  intrinsic: { width: number; height: number };
+  screen: { x: number; y: number; width: number; height: number; radius: number };
+  shadow?: { x: number; y: number; blur: number; color: string };
+  files: Record<string, string>;
+}
+
+export async function listFrames(): Promise<string[]> {
+  const entries = await fs.readdir(FRAMES_DIR, { withFileTypes: true });
+  return entries.filter((e) => e.isDirectory()).map((e) => e.name).sort();
+}
+
+export async function loadFrame(
+  id: string,
+  color?: string,
+): Promise<{ manifest: FrameManifest; svg: string; color: string }> {
+  const dir = path.join(FRAMES_DIR, id);
+  let raw: string;
+  try {
+    raw = await fs.readFile(path.join(dir, 'manifest.json'), 'utf8');
+  } catch {
+    throw new Error(`Unknown frame: '${id}'`);
+  }
+  const manifest = JSON.parse(raw) as FrameManifest;
+  const chosen = color && manifest.files[color] ? color : manifest.colors[0];
+  const svg = await fs.readFile(path.join(dir, manifest.files[chosen]), 'utf8');
+  return { manifest, svg, color: chosen };
+}

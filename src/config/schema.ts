@@ -38,7 +38,7 @@ const SlotSchema = z.object({
   template: z.string(),
   screenshot: z.string(),
   frame: FrameRefSchema,
-  layout: LayoutSchema.default({ tilt: { x: 0, y: 0, z: 0 }, translate: { x: 0, y: 0 }, perspective: 2000 }),
+  layout: LayoutSchema.default({}),
   copy: z.record(z.string(), z.record(z.string(), z.string())),
 });
 
@@ -49,7 +49,7 @@ const PathsSchema = z
     templates: z.string().default('./templates'),
     assets: z.string().default('./assets'),
   })
-  .default({ inputs: './inputs', outputs: './outputs', templates: './templates', assets: './assets' });
+  .default({});
 
 export const ConfigSchema = z.object({
   locales: z.array(z.string()).min(1),

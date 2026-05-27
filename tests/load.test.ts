@@ -17,5 +17,7 @@ describe('loadConfig', () => {
   it('throws ConfigValidationError on invalid config', async () => {
     await expect(loadConfig(path.join(here, 'fixtures/invalid.config.ts')))
       .rejects.toBeInstanceOf(ConfigValidationError);
+    await expect(loadConfig(path.join(here, 'fixtures/invalid.config.ts')))
+      .rejects.toThrow(/tilt\.y/);
   });
 });

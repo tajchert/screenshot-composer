@@ -22,9 +22,10 @@ export async function loadConfig(configPath: string): Promise<Config> {
 
   const result = ConfigSchema.safeParse(loaded);
   if (!result.success) {
-    const first = result.error.issues[0];
-    const loc = first ? first.path.join('.') : '(root)';
-    throw new ConfigValidationError(configPath, `${loc}: ${first?.message ?? 'invalid config'}`);
+    const detail = result.error.issues
+      .map((i) => `${i.path.length ? i.path.join('.') : '(root)'}: ${i.message}`)
+      .join('\n');
+    throw new ConfigValidationError(configPath, detail);
   }
   return result.data;
 }

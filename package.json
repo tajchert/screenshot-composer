@@ -1,0 +1,29 @@
+{
+  "name": "screenshot-composer",
+  "version": "0.0.0",
+  "description": "Compose Google Play Store screenshots from Android app screenshots",
+  "type": "module",
+  "license": "MIT",
+  "engines": { "node": ">=20" },
+  "bin": { "screenshot-composer": "dist/cli.js" },
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "cli": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "zod": "^3.23.8",
+    "jiti": "^2.4.2",
+    "sharp": "^0.33.5",
+    "playwright": "^1.49.1",
+    "execa": "^9.5.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "tsx": "^4.19.2",
+    "vitest": "^2.1.8",
+    "@types/node": "^22.10.2"
+  }
+}

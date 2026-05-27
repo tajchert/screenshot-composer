@@ -2011,3 +2011,14 @@ git commit -m "feat: wire Commander CLI for init and generate"
 - Exit codes: missing config → 1, missing input → 2.
 
 These prove the full pipeline end-to-end and set up Milestone 2 (full config + CLI surface).
+
+---
+
+## Milestone 2 backlog (raised during Milestone 1 code review)
+
+Config-validation hardening deferred here intentionally — it belongs with M2's "full Zod schema + line-accurate error reporting":
+
+- **Discriminated union for `background`:** enforce `color` for `type: 'solid'` and `stops` (≥2) for `type: 'gradient'` via `z.discriminatedUnion`, so invalid theme backgrounds fail at config-load instead of degrading at render.
+- **Cross-field `defaultLocale ∈ locales`:** add a `.superRefine` so a typo'd `defaultLocale` is caught with a clear message.
+- **Color validation:** validate palette/stop strings against a CSS-color pattern.
+- **Clean missing-config message:** when `generate` runs with no config file, surface a friendly "No config found — run `screenshot-composer init` first" instead of leaking the raw jiti/`require` stack (currently still exits 1, just with an internal message).

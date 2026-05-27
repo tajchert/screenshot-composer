@@ -1,6 +1,6 @@
 export class ConfigValidationError extends Error {
-  constructor(public file: string, detail: string) {
-    super(`Config error in ${file}\n  ${detail}`);
+  constructor(public file: string, message: string) {
+    super(message);
     this.name = 'ConfigValidationError';
   }
 }

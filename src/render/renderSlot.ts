@@ -1,5 +1,6 @@
 import type { RenderServer } from './server.js';
 import type { FormFactorT } from '../config/schema.js';
+import type { BrowserContext } from 'playwright';
 import { getBrowser } from './browser.js';
 import { resolveDimensions, enforceConstraints } from './constraints.js';
 import { RenderError } from '../errors.js';
@@ -12,14 +13,16 @@ export async function renderSlot(
 ): Promise<Buffer> {
   const { width, height, scale } = resolveDimensions(format);
   const browser = await getBrowser();
-  const context = await browser.newContext({
-    viewport: { width, height },
-    deviceScaleFactor: scale,
-    colorScheme: 'light',
-    locale,
-  });
+  let context: BrowserContext | undefined;
 
   try {
+    context = await browser.newContext({
+      viewport: { width, height },
+      deviceScaleFactor: scale,
+      colorScheme: 'light',
+      locale,
+    });
+
     const page = await context.newPage();
     const res = await page.goto(
       `${server.url}/render?slot=${encodeURIComponent(slotId)}&locale=${encodeURIComponent(locale)}&format=${format}`,
@@ -35,9 +38,14 @@ export async function renderSlot(
       // @ts-ignore
       const imgs = Array.from(document.images).filter((i) => !i.complete);
       await Promise.all(imgs.map((i) => new Promise((r) => { i.onload = i.onerror = r; })));
-      await new Promise<void>((resolve) => {
-        // @ts-ignore
-        const check = () => (window.__READY__ ? resolve() : setTimeout(check, 16));
+      await new Promise<void>((resolve, reject) => {
+        const deadline = Date.now() + 10_000;
+        const check = () => {
+          // @ts-ignore
+          if (window.__READY__) { resolve(); return; }
+          if (Date.now() > deadline) { reject(new Error('Template did not signal __READY__ within 10s')); return; }
+          setTimeout(check, 16);
+        };
         check();
       });
     });
@@ -45,6 +53,6 @@ export async function renderSlot(
     const png = await page.screenshot({ type: 'png', fullPage: false });
     return await enforceConstraints(png, slotId);
   } finally {
-    await context.close();
+    if (context) await context.close();
   }
 }

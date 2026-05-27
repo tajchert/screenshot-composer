@@ -45,4 +45,9 @@ describe('render server', () => {
     const res = await fetch(`${server.url}/input/de/phone/missing.png`);
     expect(res.status).toBe(404);
   });
+
+  it('rejects path traversal attempts', async () => {
+    const res = await fetch(`${server.url}/input/../../etc/passwd`);
+    expect(res.status).toBe(404);
+  });
 });

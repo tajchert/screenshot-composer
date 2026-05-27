@@ -40,12 +40,15 @@ export async function startRenderServer(opts: { config: Config; paths: ProjectPa
         const rel = decodeURIComponent(url.pathname.slice('/input/'.length));
         // Prevent path traversal.
         const filePath = path.join(paths.inputs, rel);
-        if (!filePath.startsWith(paths.inputs) || !existsSync(filePath)) {
+        const relCheck = path.relative(paths.inputs, filePath);
+        if (relCheck.startsWith('..') || path.isAbsolute(relCheck) || !existsSync(filePath)) {
           res.writeHead(404).end('not found');
           return;
         }
         res.writeHead(200, { 'content-type': MIME[path.extname(filePath).toLowerCase()] ?? 'application/octet-stream' });
-        createReadStream(filePath).pipe(res);
+        const stream = createReadStream(filePath);
+        stream.on('error', () => { if (!res.headersSent) res.writeHead(500).end(); else res.destroy(); });
+        stream.pipe(res);
         return;
       }
 

@@ -21,7 +21,7 @@ const FrameRefSchema = z.object({
 });
 
 // Permissive CSS color: hex, rgb(a)/hsl(a) functions, or a bare keyword.
-const CSS_COLOR = /^(#[0-9a-fA-F]{3,8}|rgba?\([^)]*\)|hsla?\([^)]*\)|[a-zA-Z]+)$/;
+const CSS_COLOR = /^(#[0-9a-fA-F]{3,8}|rgba?\([^)]+\)|hsla?\([^)]+\)|[a-zA-Z]+)$/;
 const cssColor = z.string().regex(CSS_COLOR, 'must be a valid CSS color');
 
 const SolidBackground = z.object({
@@ -71,6 +71,7 @@ export const ConfigSchema = z
     slots: z.array(SlotSchema).min(1).max(8),
   })
   .superRefine((cfg, ctx) => {
+    if (cfg.locales.length === 0) return;
     if (!cfg.locales.includes(cfg.defaultLocale)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,

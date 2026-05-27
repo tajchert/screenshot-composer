@@ -70,6 +70,12 @@ describe('ConfigSchema', () => {
     expect(ConfigSchema.safeParse(bad).success).toBe(false);
   });
 
+  it('rejects an empty rgb() color', () => {
+    const bad = structuredClone(valid);
+    bad.theme.palette.fg = 'rgb()';
+    expect(ConfigSchema.safeParse(bad).success).toBe(false);
+  });
+
   it('rejects defaultLocale that is not in locales', () => {
     const bad = structuredClone(valid);
     bad.defaultLocale = 'fr';

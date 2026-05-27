@@ -6,7 +6,7 @@ export default defineConfig({
   formFactors: ['phone'],
   theme: {
     palette: { fg: '#0F172A', accent: '#6366F1', muted: '#94A3B8' },
-    background: { type: 'gradient', stops: ['#000'] },
+    background: { type: 'gradient', stops: ['#000', '#111'] },
   },
   // Intentionally invalid at runtime (not at type level): tilt.y is out of the
   // [-45, 45] range enforced by Zod. Caught by ConfigSchema.safeParse, not tsc.

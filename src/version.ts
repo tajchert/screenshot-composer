@@ -1,4 +1,6 @@
 import { createRequire } from 'node:module';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 
 const require = createRequire(import.meta.url);
 
@@ -21,13 +23,14 @@ export function versionInfo(): VersionInfo {
 
   let chromium = 'unknown';
   try {
-    const browsers = require('playwright-core/browsers.json') as {
-      browsers: { name: string; revision: string }[];
+    const pkgDir = path.dirname(require.resolve('playwright-core'));
+    const data = JSON.parse(readFileSync(path.join(pkgDir, 'browsers.json'), 'utf8')) as {
+      browsers: { name: string; revision: string; browserVersion?: string }[];
     };
-    const c = browsers.browsers.find((b) => b.name === 'chromium');
-    if (c) chromium = `rev ${c.revision}`;
+    const c = data.browsers.find((b) => b.name === 'chromium');
+    if (c) chromium = c.browserVersion ? `${c.browserVersion} (rev ${c.revision})` : `rev ${c.revision}`;
   } catch {
-    // browsers.json not exported by this playwright-core version; leave 'unknown'
+    // browsers.json not resolvable; leave 'unknown'
   }
 
   return { tool: pkg.version, node: process.versions.node, playwright, chromium };

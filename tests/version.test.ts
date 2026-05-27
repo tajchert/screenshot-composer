@@ -6,8 +6,8 @@ describe('version', () => {
     const v = versionInfo();
     expect(v.tool).toMatch(/\d+\.\d+\.\d+/);
     expect(v.node).toBe(process.versions.node);
-    expect(typeof v.playwright).toBe('string');
-    expect(typeof v.chromium).toBe('string');
+    expect(v.playwright).toMatch(/\d+\.\d+\.\d+/);
+    expect(v.chromium).toMatch(/\d/);
   });
 
   it('formats a multi-line version string containing the tool semver', () => {

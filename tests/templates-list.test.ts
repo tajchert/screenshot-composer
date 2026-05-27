@@ -20,4 +20,14 @@ describe('listTemplates', () => {
     const list = await listTemplates(p);
     expect(list.some((t) => t.id === 'my-custom' && t.source === 'project')).toBe(true);
   });
+
+  it('lets a project template shadow a built-in id (listed once, as project)', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'sc-tpl3-'));
+    const p = projectPaths(root);
+    await fs.mkdir(path.join(p.templates, 'bold-headline'), { recursive: true });
+    const list = await listTemplates(p);
+    const matches = list.filter((t) => t.id === 'bold-headline');
+    expect(matches).toHaveLength(1);
+    expect(matches[0].source).toBe('project');
+  });
 });

@@ -24,10 +24,8 @@ export async function listFrames(): Promise<string[]> {
     .sort();
 }
 
-export async function loadFrame(
-  id: string,
-  color?: string,
-): Promise<{ manifest: FrameManifest; svg: string; color: string }> {
+/** Read and parse manifest.json for a frame, without loading the SVG. */
+export async function loadManifest(id: string): Promise<FrameManifest> {
   const dir = path.join(FRAMES_DIR, id);
   let raw: string;
   try {
@@ -35,12 +33,20 @@ export async function loadFrame(
   } catch {
     throw new Error(`Unknown frame: '${id}'`);
   }
-  const manifest = JSON.parse(raw) as FrameManifest;
+  return JSON.parse(raw) as FrameManifest;
+}
+
+export async function loadFrame(
+  id: string,
+  color?: string,
+): Promise<{ manifest: FrameManifest; svg: string; color: string }> {
+  const manifest = await loadManifest(id);
   const resolved = color && manifest.files[color] ? color : manifest.colors?.[0];
   if (!resolved || !manifest.files[resolved]) {
     throw new Error(`Frame '${id}' has no usable color/svg files`);
   }
   const chosen = resolved;
+  const dir = path.join(FRAMES_DIR, id);
   const svg = await fs.readFile(path.join(dir, manifest.files[chosen]), 'utf8');
   return { manifest, svg, color: chosen };
 }
@@ -56,7 +62,7 @@ export async function listFrameInfos(): Promise<FrameInfo[]> {
   const ids = await listFrames();
   const infos: FrameInfo[] = [];
   for (const id of ids) {
-    const { manifest } = await loadFrame(id);
+    const manifest = await loadManifest(id);
     infos.push({ id, displayName: manifest.displayName, colors: manifest.colors });
   }
   return infos;

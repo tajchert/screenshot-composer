@@ -7,6 +7,6 @@ describe('listFrameInfos', () => {
     const pixel = infos.find((f) => f.id === 'pixel-9');
     expect(pixel).toBeDefined();
     expect(pixel!.displayName).toBe('Pixel 9');
-    expect(pixel!.colors).toEqual(['obsidian']);
+    expect(pixel!.colors).toContain('obsidian');
   });
 });

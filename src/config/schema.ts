@@ -20,16 +20,26 @@ const FrameRefSchema = z.object({
   color: z.string().optional(),
 });
 
-const BackgroundSchema = z.object({
-  type: z.enum(['solid', 'gradient']),
-  color: z.string().optional(),
-  direction: z.number().default(135),
-  stops: z.array(z.string()).optional(),
+// Permissive CSS color: hex, rgb(a)/hsl(a) functions, or a bare keyword.
+const CSS_COLOR = /^(#[0-9a-fA-F]{3,8}|rgba?\([^)]*\)|hsla?\([^)]*\)|[a-zA-Z]+)$/;
+const cssColor = z.string().regex(CSS_COLOR, 'must be a valid CSS color');
+
+const SolidBackground = z.object({
+  type: z.literal('solid'),
+  color: cssColor,
 });
+
+const GradientBackground = z.object({
+  type: z.literal('gradient'),
+  direction: z.number().default(135),
+  stops: z.array(cssColor).min(2, 'a gradient needs at least 2 color stops'),
+});
+
+const BackgroundSchema = z.discriminatedUnion('type', [SolidBackground, GradientBackground]);
 
 const ThemeSchema = z.object({
   fontFamily: z.string().default('system-ui'),
-  palette: z.object({ fg: z.string(), accent: z.string(), muted: z.string() }),
+  palette: z.object({ fg: cssColor, accent: cssColor, muted: cssColor }),
   background: BackgroundSchema,
 });
 
@@ -51,14 +61,24 @@ const PathsSchema = z
   })
   .default({});
 
-export const ConfigSchema = z.object({
-  locales: z.array(z.string()).min(1),
-  defaultLocale: z.string(),
-  formFactors: z.array(FormFactor).min(1),
-  paths: PathsSchema,
-  theme: ThemeSchema,
-  slots: z.array(SlotSchema).min(1).max(8),
-});
+export const ConfigSchema = z
+  .object({
+    locales: z.array(z.string()).min(1),
+    defaultLocale: z.string(),
+    formFactors: z.array(FormFactor).min(1),
+    paths: PathsSchema,
+    theme: ThemeSchema,
+    slots: z.array(SlotSchema).min(1).max(8),
+  })
+  .superRefine((cfg, ctx) => {
+    if (!cfg.locales.includes(cfg.defaultLocale)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['defaultLocale'],
+        message: `'${cfg.defaultLocale}' is not one of locales [${cfg.locales.join(', ')}]`,
+      });
+    }
+  });
 
 export type Config = z.infer<typeof ConfigSchema>;
 export type Slot = z.infer<typeof SlotSchema>;

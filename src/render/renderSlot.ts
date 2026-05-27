@@ -32,23 +32,9 @@ export async function renderSlot(
       throw new RenderError(`Render route failed for slot '${slotId}' (${res?.status() ?? 'no response'})`);
     }
 
-    await page.evaluate(async () => {
-      // @ts-ignore - browser context
-      await document.fonts.ready;
-      // @ts-ignore
-      const imgs = Array.from(document.images).filter((i) => !i.complete);
-      await Promise.all(imgs.map((i) => new Promise((r) => { i.onload = i.onerror = r; })));
-      await new Promise<void>((resolve, reject) => {
-        const deadline = Date.now() + 10_000;
-        const check = () => {
-          // @ts-ignore
-          if (window.__READY__) { resolve(); return; }
-          if (Date.now() > deadline) { reject(new Error('Template did not signal __READY__ within 10s')); return; }
-          setTimeout(check, 16);
-        };
-        check();
-      });
-    });
+    // Wait for fonts and images via a string expression to avoid esbuild __name injection.
+    await page.waitForFunction('document.fonts.ready.then(() => true)');
+    await page.waitForFunction('window.__READY__ === true', undefined, { timeout: 10_000 });
 
     const png = await page.screenshot({ type: 'png', fullPage: false });
     return await enforceConstraints(png, slotId);

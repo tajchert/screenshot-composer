@@ -44,3 +44,20 @@ export async function loadFrame(
   const svg = await fs.readFile(path.join(dir, manifest.files[chosen]), 'utf8');
   return { manifest, svg, color: chosen };
 }
+
+export interface FrameInfo {
+  id: string;
+  displayName: string;
+  colors: string[];
+}
+
+/** List built-in frames with display name and available colors. */
+export async function listFrameInfos(): Promise<FrameInfo[]> {
+  const ids = await listFrames();
+  const infos: FrameInfo[] = [];
+  for (const id of ids) {
+    const { manifest } = await loadFrame(id);
+    infos.push({ id, displayName: manifest.displayName, colors: manifest.colors });
+  }
+  return infos;
+}

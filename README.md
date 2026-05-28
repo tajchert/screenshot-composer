@@ -196,4 +196,6 @@ template. The design spec and milestone plans live in
 
 ## License
 
-MIT.
+This project is licensed under the MIT License. However, it incorporates assets and code from the Android Open Source Project (AOSP), which are licensed under the Apache License, Version 2.0. See the LICENSE-APACHE file for details.
+
+The full MIT text is in [LICENSE](LICENSE); attribution for AOSP-derived material is in [NOTICE](NOTICE).

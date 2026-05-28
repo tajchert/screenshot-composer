@@ -47,6 +47,7 @@ function defs(W: number, H: number, s: FrameManifest['screen'], metal: { top: st
 
 /** Metal frame, a thin rim highlight on the outer edge, then a black bezel margin down to the screen. */
 function frameLayers(W: number, H: number, outerR: number, rimWidth: number, blackR: number, rim: string, bezel: string): string {
+  // The rim-highlight rect intentionally sits at the outer edge (x=2,y=2) and does NOT use rimWidth; only the black bezel rect below is inset by rimWidth.
   return `  <rect x="2" y="2" width="${W - 4}" height="${H - 4}" rx="${outerR - 2}" ry="${outerR - 2}" fill="url(#metal)" mask="url(#screenHole)"/>
   <rect x="2" y="2" width="${W - 4}" height="${H - 4}" rx="${outerR - 2}" ry="${outerR - 2}" fill="none" stroke="${rim}" stroke-width="3"/>
   <rect x="${rimWidth}" y="${rimWidth}" width="${W - 2 * rimWidth}" height="${H - 2 * rimWidth}" rx="${blackR}" ry="${blackR}" fill="${bezel}" mask="url(#screenHole)"/>`;

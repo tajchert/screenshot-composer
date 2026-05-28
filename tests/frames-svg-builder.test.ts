@@ -76,4 +76,10 @@ describe('buildTabletSvg (layered metal/bezel)', () => {
     expect(svg).not.toContain('<circle');
     expect(svg).not.toMatch(/<image[\s>]/);
   });
+
+  it('draws concentric metal + black-bezel layers for the tablet fixture', () => {
+    const svg = buildTabletSvg(tablet);
+    expect(svg).toContain('rx="68" ry="68"'); // metal body (outerR-2)
+    expect(svg).toContain('x="14" y="14" width="972" height="1572" rx="56" ry="56"'); // black bezel inset
+  });
 });

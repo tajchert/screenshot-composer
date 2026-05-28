@@ -1,0 +1,30 @@
+{
+  "id": "pixel-9a",
+  "displayName": "Pixel 9a",
+  "manufacturer": "Google",
+  "colors": [
+    "obsidian",
+    "iris"
+  ],
+  "intrinsic": {
+    "width": 800,
+    "height": 1797
+  },
+  "screen": {
+    "x": 28,
+    "y": 32,
+    "width": 744,
+    "height": 1733,
+    "radius": 44
+  },
+  "shadow": {
+    "x": 0,
+    "y": 24,
+    "blur": 64,
+    "color": "rgba(0,0,0,0.18)"
+  },
+  "files": {
+    "obsidian": "obsidian.svg",
+    "iris": "iris.svg"
+  }
+}

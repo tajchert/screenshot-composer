@@ -66,6 +66,20 @@ const HAZEL: PhoneColorway = {
   camera: '#0a0a08',
 };
 
+const IRIS: PhoneColorway = {
+  body: { top: '#6a7299', bottom: '#3f476a' },
+  bezelInner: '#0d0e16',
+  button: '#2e3550',
+  camera: '#0a0b14',
+};
+
+const GRAPHITE: PhoneColorway = {
+  body: { top: '#4b4f55', bottom: '#23262a' },
+  bezelInner: '#0c0c0e',
+  button: '#1c1e22',
+  camera: '#08080a',
+};
+
 const FRAMES: FrameSpec[] = [
   {
     form: 'phone',
@@ -96,6 +110,26 @@ const FRAMES: FrameSpec[] = [
     screen: { x: 29, y: 32, width: 762, height: 1762, radius: 45 },
     shadow: SHADOW,
     colorways: { obsidian: OBSIDIAN, porcelain: PORCELAIN },
+  },
+  {
+    form: 'phone',
+    id: 'pixel-9a',
+    displayName: 'Pixel 9a',
+    manufacturer: 'Google',
+    intrinsic: { width: 800, height: 1797 },
+    screen: { x: 28, y: 32, width: 744, height: 1733, radius: 44 },
+    shadow: SHADOW,
+    colorways: { obsidian: OBSIDIAN, iris: IRIS },
+  },
+  {
+    form: 'phone',
+    id: 'generic-android',
+    displayName: 'Generic Android',
+    manufacturer: 'Generic',
+    intrinsic: { width: 800, height: 1700 },
+    screen: { x: 28, y: 30, width: 744, height: 1640, radius: 44 },
+    shadow: SHADOW,
+    colorways: { graphite: GRAPHITE },
   },
 ];
 

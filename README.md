@@ -181,7 +181,7 @@ Built milestone-by-milestone; each has a spec and a plan under
 1. ✅ **Walking skeleton** — `init` + `generate`, one template, one frame, phone PNG.
 2. ✅ **Config + CLI surface** — hardened schema, friendly errors, `doctor`/`clean`/`templates list`/`frames list`/`--version`.
 3. ⏳ **Template system** — `TemplateProps` contract, React/Tailwind templates via Vite SSR, project-local template resolver.
-4. ⏳ **Device frames** — Pixel 9 Pro / 9 Pro XL / 9a / Pixel Tablet + generic frames.
+4. ⏳ **Device frames** — Pixel 6/7/8/9 families + Pixel Tablet + generic frames (Google-device geometry derived from AOSP emulator skins, Apache-2.0).
 5. ⏳ **All form factors + i18n + theming + tilt** — tablets, bundled fonts, RTL, text-fit.
 6. ⏳ **Caching + Fastlane `import`.**
 7. ⏳ **Distribution** — npm + Homebrew + Docker, golden tests, docs.

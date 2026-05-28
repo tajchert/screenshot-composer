@@ -13,7 +13,7 @@ if (skins.length === 0) {
 for (const skin of skins) {
   const layoutPath = path.join(SDK, 'skins', skin, 'layout');
   const g = parseAospLayout(readFileSync(layoutPath, 'utf8'));
-  const radius = g.cornerRadius ?? Math.round(0.08 * g.display.width); // documented fallback
+  const radius = g.cornerRadius ?? Math.round(0.08 * g.display.width); // heuristic: ~8% of display width when the AOSP skin omits corner_radius (Pixel 6/7/8)
   const screen = { x: g.offset.x, y: g.offset.y, width: g.display.width, height: g.display.height, radius };
   console.log(`// source: AOSP emulator skin ${skin}`);
   console.log(`intrinsic: { width: ${g.frame.width}, height: ${g.frame.height} },`);

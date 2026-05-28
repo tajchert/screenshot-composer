@@ -7,6 +7,7 @@ export interface AospGeometry {
 
 /** Parse an AOSP emulator skin `layout` file (measurements only). */
 export function parseAospLayout(text: string): AospGeometry {
+  // Assumes the display {} block precedes layouts {} in the file (true for all AOSP skins); sliceBlock slices to end-of-string, so the first width/height matched is the display's.
   const display = sliceBlock(text, 'display');
   const layouts = sliceBlock(text, 'layouts');
   const deviceAt = layouts.indexOf('name device');

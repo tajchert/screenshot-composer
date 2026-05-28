@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import showcase from '../../src/templates/showcase/index.js';
+import overlap from '../../src/templates/overlap/index.js';
 import type { TemplateProps } from '../../src/templates/types.js';
 
 const baseProps: Omit<TemplateProps, 'copy'> = {
@@ -47,6 +48,27 @@ describe('showcase template', () => {
   it('omits optional copy markup when absent and never emits remote URLs', () => {
     const html = showcase.render({ ...baseProps, copy: { headline: 'Only headline' } });
     expect(html).toContain('Only headline');
+    expect(html).not.toMatch(/https?:\/\//);
+  });
+});
+
+describe('overlap template', () => {
+  const props: TemplateProps = { ...baseProps, copy: { headline: 'SHOP', subhead: 'Now in your pocket' } };
+
+  it('declares meta: headline required, subhead optional', () => {
+    expect(overlap.meta.id).toBe('overlap');
+    const f = (k: string) => overlap.meta.copyFields.find((x) => x.key === k);
+    expect(f('headline')?.required).toBe(true);
+    expect(f('subhead')?.required).toBe(false);
+  });
+
+  it('renders the headline (watermark + accessible copy), screenshot, frame and readiness', () => {
+    const html = overlap.render(props);
+    expect(html).toContain('SHOP');
+    expect(html).toContain('Now in your pocket');
+    expect(html).toContain('/input/en-US/phone/onboarding.png');
+    expect(html).toContain('viewBox="0 0 800 1700"');
+    expect(html).toContain('__READY__');
     expect(html).not.toMatch(/https?:\/\//);
   });
 });

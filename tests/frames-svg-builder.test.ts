@@ -37,6 +37,16 @@ describe('buildPhoneSvg', () => {
     const svg = buildPhoneSvg(phone);
     expect(svg).toContain('x="28" y="30" width="744" height="1640" rx="44" ry="44"');
   });
+
+  it('draws side buttons AFTER the body rect (so they appear on top, not hidden behind it)', () => {
+    const svg = buildPhoneSvg(phone);
+    // Locate the body rect (matches: fill="url(#body)" mask="url(#screenHole)"), and the first button rect.
+    const bodyIdx = svg.indexOf('fill="url(#body)"');
+    const buttonIdx = svg.indexOf(`fill="${phone.button}"`);
+    expect(bodyIdx).toBeGreaterThan(-1);
+    expect(buttonIdx).toBeGreaterThan(-1);
+    expect(buttonIdx, 'side buttons must be drawn after the body rect').toBeGreaterThan(bodyIdx);
+  });
 });
 
 describe('buildTabletSvg', () => {

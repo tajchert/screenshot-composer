@@ -9,9 +9,9 @@
       <rect x="29" y="32" width="762" height="1762" rx="45" ry="45" fill="#000"/>
     </mask>
   </defs>
-  <rect x="812" y="383" width="10" height="164" rx="5" fill="#1a1a1c"/>
-  <rect x="812" y="603" width="10" height="91" rx="5" fill="#1a1a1c"/>
   <rect x="2" y="2" width="816" height="1822" rx="72" ry="72" fill="url(#body)" mask="url(#screenHole)"/>
   <rect x="25" y="28" width="770" height="1770" rx="49" ry="49" fill="none" stroke="#000000" stroke-width="6"/>
   <circle cx="410" cy="18" r="11" fill="#070708"/>
+  <rect x="812" y="383" width="10" height="164" rx="5" fill="#1a1a1c"/>
+  <rect x="812" y="603" width="10" height="91" rx="5" fill="#1a1a1c"/>
 </svg>

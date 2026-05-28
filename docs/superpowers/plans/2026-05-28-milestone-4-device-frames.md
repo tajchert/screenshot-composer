@@ -1185,7 +1185,7 @@ git commit -m "test: render matrix across phone frames; docs: M4 frame catalog"
 
 ## Done criteria for Milestone 4
 
-- Eight frame directories exist under `src/frames/`: `pixel-9`, `pixel-9-pro`, `pixel-9-pro-xl`, `pixel-9a`, `pixel-tablet`, `generic-android`, `generic-tablet-7`, `generic-tablet-10`. Eleven SVG files total.
+- Eight frame directories exist under `src/frames/`: `pixel-9`, `pixel-9-pro`, `pixel-9-pro-xl`, `pixel-9a`, `pixel-tablet`, `generic-android`, `generic-tablet-7`, `generic-tablet-10`. Thirteen SVG files total.
 - Every manifest is Zod-validated at load time; malformed manifests fail with a field path.
 - A single structural test (`tests/frames-structural.test.ts`) validates every frame on disk for: manifest schema, screen-within-intrinsic, files↔colors agreement, SVG viewBox matches intrinsic, no `<image>` rasters, no remote URLs.
 - All five phone frames render to valid 1080×1920 PNGs under 8 MB through real Chromium with the `bold-headline` template.

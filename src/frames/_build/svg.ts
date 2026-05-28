@@ -43,11 +43,11 @@ export function buildPhoneSvg(opts: PhoneSvgOpts): string {
       <rect x="${s.x}" y="${s.y}" width="${s.width}" height="${s.height}" rx="${s.radius}" ry="${s.radius}" fill="#000"/>
     </mask>
   </defs>
-  <rect x="${btnX}" y="${pwrY}" width="${btnW}" height="${pwrH}" rx="5" fill="${button}"/>
-  <rect x="${btnX}" y="${volY}" width="${btnW}" height="${volH}" rx="5" fill="${button}"/>
   <rect x="2" y="2" width="${W - 4}" height="${H - 4}" rx="${outerR - 2}" ry="${outerR - 2}" fill="url(#body)" mask="url(#screenHole)"/>
   <rect x="${s.x - 4}" y="${s.y - 4}" width="${s.width + 8}" height="${s.height + 8}" rx="${s.radius + 4}" ry="${s.radius + 4}" fill="none" stroke="${bezelInner}" stroke-width="6"/>
   <circle cx="${camCx}" cy="${camCy}" r="${camR}" fill="${camera}"/>
+  <rect x="${btnX}" y="${pwrY}" width="${btnW}" height="${pwrH}" rx="5" fill="${button}"/>
+  <rect x="${btnX}" y="${volY}" width="${btnW}" height="${volH}" rx="5" fill="${button}"/>
 </svg>
 `;
 }

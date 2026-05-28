@@ -49,6 +49,20 @@ describe('shared template helpers', () => {
     expect(html).toContain('viewBox="0 0 800 1700"');
   });
 
+  it('forces the frame svg to fill the device container, overriding its intrinsic size', () => {
+    // A frame whose intrinsic px size (800x1700) differs from the device container
+    // must still scale to the container, or the cutout drifts away from the screenshot.
+    const sized: TemplateProps['frame'] = {
+      ...frame,
+      svg: '<svg viewBox="0 0 800 1700" width="800" height="1700"></svg>',
+    };
+    const m = computeDevice(sized, 1000); // deviceWidth ~= 471, not 800
+    const html = deviceMarkup('/input/a.png', sized, m, 'none');
+    // Inline style on the <svg> overrides the width/height presentation attributes,
+    // so the viewBox maps to the (smaller) container the screenshot is sized against.
+    expect(html).toMatch(/<svg[^>]*style="[^"]*width:\s*100%[^"]*height:\s*100%/);
+  });
+
   it('emits a readiness script setting __READY__', () => {
     expect(readyScript()).toContain('__READY__');
     expect(readyScript()).toContain('document.fonts.ready');

@@ -48,9 +48,15 @@ export function deviceMarkup(
   m: DeviceMetrics,
   transform: string,
 ): string {
+  // The frame SVG carries intrinsic width/height attributes (its native px size).
+  // Force it to fill the device container via an inline style — inline styles override
+  // presentation attributes — so its viewBox maps to the same coordinate space the
+  // screenshot <img> is sized against. Without this the masked screen cutout drifts
+  // away from the screenshot and the page background shows through (see shared.test.ts).
+  const filledSvg = frame.svg.replace(/<svg\b/, '<svg style="width:100%;height:100%;display:block"');
   return `<div style="position:relative;width:${m.deviceWidth}px;height:${m.deviceHeight}px;transform:${transform};transform-origin:center center;">
       <img style="position:absolute;left:${m.screenLeft}%;top:${m.screenTop}%;width:${m.screenW}%;height:${m.screenH}%;object-fit:cover;border-radius:${m.screenRadius}px;" src="${escapeHtml(screenshotUrl)}" alt="">
-      <div style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;">${frame.svg}</div>
+      <div style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;">${filledSvg}</div>
     </div>`;
 }
 

@@ -30,7 +30,7 @@ export function render(props: TemplateProps): string {
   .headline {
     position: absolute; top: 0; left: 0; right: 0;
     padding: 96px 80px 0; text-align: center;
-    font-size: 76px; font-weight: 800; line-height: 1.05; color: #ffffff;
+    font-size: 76px; font-weight: 800; line-height: 1.05; color: ${theme.palette.fg};
   }
   .stage {
     position: absolute; left: 0; right: 0; bottom: 0;

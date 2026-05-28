@@ -45,6 +45,15 @@ describe('bold-headline template', () => {
     expect(html).toContain('perspective(2000px)');
   });
 
+  it('uses theme.palette.fg for the headline color (not hardcoded white)', () => {
+    const html = render({
+      ...props,
+      theme: { ...props.theme, palette: { ...props.theme.palette, fg: '#abcdef' } },
+    });
+    expect(html).toMatch(/\.headline\s*{[^}]*color:\s*#abcdef/);
+    expect(html).not.toMatch(/\.headline\s*{[^}]*color:\s*#ffffff/i);
+  });
+
   it('escapes special characters in the headline', () => {
     const html = render({ ...props, copy: { headline: '<b>Fast</b> & "cheap"' } });
     expect(html).toContain('&lt;b&gt;Fast&lt;/b&gt; &amp; &quot;cheap&quot;');

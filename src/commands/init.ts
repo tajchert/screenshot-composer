@@ -13,7 +13,7 @@ export default defineConfig({
 
   theme: {
     fontFamily: 'system-ui',
-    palette: { fg: '#0F172A', accent: '#6366F1', muted: '#94A3B8' },
+    palette: { fg: '#FFFFFF', accent: '#A78BFA', muted: '#E2E8F0' },
     background: { type: 'gradient', direction: 135, stops: ['#6366F1', '#8B5CF6'] },
   },
 

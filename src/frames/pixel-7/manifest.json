@@ -1,21 +1,21 @@
 {
-  "id": "pixel-9-pro",
-  "displayName": "Pixel 9 Pro",
+  "id": "pixel-7",
+  "displayName": "Pixel 7",
   "manufacturer": "Google",
   "colors": [
     "obsidian",
-    "hazel"
+    "snow"
   ],
   "intrinsic": {
-    "width": 1408,
-    "height": 2974
+    "width": 1200,
+    "height": 2541
   },
   "screen": {
-    "x": 60,
-    "y": 61,
-    "width": 1280,
-    "height": 2856,
-    "radius": 109
+    "x": 59,
+    "y": 58,
+    "width": 1080,
+    "height": 2400,
+    "radius": 86
   },
   "shadow": {
     "x": 0,
@@ -23,10 +23,10 @@
     "blur": 64,
     "color": "rgba(0,0,0,0.18)"
   },
-  "source": "AOSP emulator skin pixel_9_pro",
+  "source": "AOSP emulator skin pixel_7",
   "license": "Apache-2.0",
   "files": {
     "obsidian": "obsidian.svg",
-    "hazel": "hazel.svg"
+    "snow": "snow.svg"
   }
 }

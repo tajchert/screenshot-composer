@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1187 2513" width="1187" height="2513">
+  <defs>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a3a3f"/>
+      <stop offset="1" stop-color="#0e0e10"/>
+    </linearGradient>
+    <mask id="screenHole">
+      <rect x="0" y="0" width="1187" height="2513" fill="#fff"/>
+      <rect x="49" y="55" width="1080" height="2400" rx="86" ry="86" fill="#000"/>
+    </mask>
+  </defs>
+  <rect x="2" y="2" width="1183" height="2509" rx="133" ry="133" fill="url(#metal)" mask="url(#screenHole)"/>
+  <rect x="2" y="2" width="1183" height="2509" rx="133" ry="133" fill="none" stroke="#6b6b72" stroke-width="3"/>
+  <rect x="17" y="17" width="1153" height="2479" rx="118" ry="118" fill="#050506" mask="url(#screenHole)"/>
+  <circle cx="594" cy="30" r="17" fill="#070708"/>
+  <rect x="1179" y="528" width="10" height="226" rx="5" fill="#1a1a1c"/>
+  <rect x="1179" y="829" width="10" height="126" rx="5" fill="#1a1a1c"/>
+</svg>

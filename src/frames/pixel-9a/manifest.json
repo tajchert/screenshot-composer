@@ -7,15 +7,15 @@
     "iris"
   ],
   "intrinsic": {
-    "width": 800,
-    "height": 1797
+    "width": 1224,
+    "height": 2570
   },
   "screen": {
-    "x": 28,
-    "y": 32,
-    "width": 744,
-    "height": 1733,
-    "radius": 44
+    "x": 69,
+    "y": 73,
+    "width": 1080,
+    "height": 2424,
+    "radius": 87
   },
   "shadow": {
     "x": 0,
@@ -23,6 +23,8 @@
     "blur": 64,
     "color": "rgba(0,0,0,0.18)"
   },
+  "source": "AOSP emulator skin pixel_9a",
+  "license": "Apache-2.0",
   "files": {
     "obsidian": "obsidian.svg",
     "iris": "iris.svg"

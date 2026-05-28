@@ -53,7 +53,7 @@ config.ts ──jiti+zod──► Config ──► render HTTP server ──Play
    on first run.
 3. **Start the render server** (`src/render/server.ts`): a tiny `http` server serving
    - `GET /render?slot=&locale=&format=` → the composed HTML page (`src/render/compose.ts`
-     → `src/templates/bold-headline/render.ts`)
+     → resolved `TemplateModule` via `src/templates/resolve.ts`)
    - `GET /input/<locale>/<format>/<file>` → the raw screenshot bytes (path-traversal guarded)
 4. **Render each slot** (`src/render/renderSlot.ts`): open a Playwright context at the resolved
    `viewport`/`deviceScaleFactor`, navigate to `/render`, wait for readiness
@@ -62,9 +62,11 @@ config.ts ──jiti+zod──► Config ──► render HTTP server ──Play
    if a PNG would exceed 8 MB.
 5. **Write** to `outputs/<locale>/<format>/<slotId>.<ext>`.
 
-**The render-route contract (`/render?slot&locale&format`) is intentionally stable.** Milestone
-3 will swap the HTML-string template for React + Tailwind via Vite SSR *behind this same
-route*, so the renderer/editor don't change.
+**The render-route contract (`/render?slot&locale&format`) is intentionally stable.** Templates
+are typed HTML-string modules (`TemplateModule` = `{ meta, render(props): string }`). Built-ins
+live in `src/templates/<id>/`; project-local templates under
+`play-screenshots/templates/<id>/index.ts` are loaded via `jiti` and shadow built-ins of the
+same id. The route is unchanged.
 
 ## Module map
 
@@ -85,8 +87,12 @@ route*, so the renderer/editor don't change.
 | `src/render/browser.ts` | Playwright browser singleton (**dynamic** import — see gotchas) |
 | `src/render/renderSlot.ts` | Navigate + readiness wait + screenshot + constraints |
 | `src/render/constraints.ts` | `resolveDimensions()` (phone only today), `enforceConstraints()`, `extFor()` |
-| `src/templates/bold-headline/render.ts` | `renderHtml(props)` → composition HTML string |
-| `src/templates/registry.ts` | `BUILTIN_TEMPLATES` + `listTemplates()` |
+| `src/templates/types.ts` | `TemplateProps` / `TemplateMeta` / `TemplateModule` contract |
+| `src/templates/shared.ts` | `escapeHtml`, `backgroundCss`, device metrics + markup, readiness script |
+| `src/templates/<id>/index.ts` | A built-in template (`bold-headline`, `showcase`, `overlap`): default-exports `{ meta, render }` |
+| `src/templates/registry.ts` | `BUILTIN_MODULES` map (single source of truth) + derived `BUILTIN_TEMPLATES` + `listTemplates()` |
+| `src/templates/resolve.ts` | `resolveTemplate(id, paths)` — project-local (jiti) then built-in |
+| `src/templates/validate.ts` | `validateSlotTemplates()` — required-copy preflight before Chromium launches |
 | `src/frames/load.ts` | `listFrames()`, `loadManifest()`, `loadFrame()`, `listFrameInfos()` |
 | `src/frames/pixel-9/` | `manifest.json` + `obsidian.svg` (clean-room) |
 | `src/commands/*.ts` | One thin `runX()` per CLI command (init/generate/doctor/clean/templatesList/framesList) |
@@ -135,15 +141,25 @@ unit tests but would have broken the real CLI:
 3. `listFrames()` auto-discovers any directory containing a `manifest.json`. Reference it in a
    config slot as `frame: { id: '<id>', color: '<color>' }`.
 
-## How to add a template (partly future work)
+## How to add a template (works today)
 
-A built-in template id lives in `src/templates/registry.ts` (`BUILTIN_TEMPLATES`) and a
-renderer in `src/templates/<id>/`. **Right now `compose.ts` only renders `bold-headline`** —
-generalizing the resolver and the `TemplateProps` contract (and moving to React/Tailwind +
-Vite SSR) is **Milestone 3**. Until then, treat the template layer as not-yet-pluggable: if
-you need a new look quickly, it's a temporary fork of `bold-headline/render.ts`, and the M3
-work will define the real extension point. `templates list` already enumerates built-in +
-project-local directories in anticipation.
+A template is a module whose **default export** is a `TemplateModule` (`{ meta, render }`).
+`render(props: TemplateProps): string` returns the full HTML page; use the helpers in
+`src/templates/shared.ts` (`escapeHtml`, `backgroundCss`, `computeDevice`, `deviceTransform`,
+`deviceMarkup`, `readyScript`) instead of duplicating that logic. `meta.copyFields` declares
+which copy keys the template uses; required keys are validated before Chromium launches
+(`src/templates/validate.ts`).
+
+1. **Built-in:** create `src/templates/<id>/index.ts` (mirror `bold-headline/index.ts`) and
+   register it in `BUILTIN_MODULES` in `src/templates/registry.ts`. `BUILTIN_TEMPLATES` and
+   `templates list` derive automatically.
+2. **Project-local:** drop `play-screenshots/templates/<id>/index.ts` in the user's repo with
+   the same default-export shape. It's loaded via `jiti` (no build step) and **shadows** a
+   built-in of the same id.
+
+`compose.ts` resolves any template id through `resolveTemplate(id, paths)` — project-local
+first, then built-in; unknown ids throw `ConfigValidationError` (exit 1) listing the available
+ids.
 
 ## Testing conventions
 
@@ -162,8 +178,7 @@ plan (`docs/superpowers/plans/`) → execute one milestone at a time with per-ta
 two-stage (spec + code-quality) review. When picking up the next milestone, read its plan;
 cross-milestone follow-ups raised during review are recorded as **backlog notes** at the
 bottom of the relevant plan (e.g. the M1 plan's "Milestone 2 backlog", the M2 plan's
-deferred items). Current state: **Milestones 1–2 complete and merged to `master`**; next is
-**Milestone 3 (template system)**.
+deferred items). Current state: **Milestones 1–3 complete**; next is **Milestone 4 (device frames)**.
 
 When you finish a feature, follow the same loop: keep the design doc/plan in
 `docs/superpowers/` authoritative, update README/CLAUDE if the user-facing surface or

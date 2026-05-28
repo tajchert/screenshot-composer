@@ -52,6 +52,13 @@ const OBSIDIAN: PhoneColorway = {
   camera: '#070708',
 };
 
+const PORCELAIN: PhoneColorway = {
+  body: { top: '#f5f1ea', bottom: '#e2dccf' },
+  bezelInner: '#1f1d1a',
+  button: '#c8c0b1',
+  camera: '#1a1916',
+};
+
 const FRAMES: FrameSpec[] = [
   {
     form: 'phone',
@@ -61,7 +68,7 @@ const FRAMES: FrameSpec[] = [
     intrinsic: { width: 800, height: 1700 },
     screen: { x: 28, y: 30, width: 744, height: 1640, radius: 44 },
     shadow: SHADOW,
-    colorways: { obsidian: OBSIDIAN },
+    colorways: { obsidian: OBSIDIAN, porcelain: PORCELAIN },
   },
 ];
 

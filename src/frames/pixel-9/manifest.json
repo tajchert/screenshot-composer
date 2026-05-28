@@ -3,7 +3,8 @@
   "displayName": "Pixel 9",
   "manufacturer": "Google",
   "colors": [
-    "obsidian"
+    "obsidian",
+    "porcelain"
   ],
   "intrinsic": {
     "width": 800,
@@ -23,6 +24,7 @@
     "color": "rgba(0,0,0,0.18)"
   },
   "files": {
-    "obsidian": "obsidian.svg"
+    "obsidian": "obsidian.svg",
+    "porcelain": "porcelain.svg"
   }
 }

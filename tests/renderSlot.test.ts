@@ -51,6 +51,34 @@ export default defineConfig({
         subhead: { 'en-US': 'Now in your pocket' },
       },
     },
+    {
+      id: '04-pixel-9-pro',
+      template: 'bold-headline',
+      screenshot: 'onboarding.png',
+      frame: { id: 'pixel-9-pro', color: 'obsidian' },
+      copy: { headline: { 'en-US': 'Pixel 9 Pro' } },
+    },
+    {
+      id: '05-pixel-9-pro-xl',
+      template: 'bold-headline',
+      screenshot: 'onboarding.png',
+      frame: { id: 'pixel-9-pro-xl', color: 'porcelain' },
+      copy: { headline: { 'en-US': 'Pixel 9 Pro XL' } },
+    },
+    {
+      id: '06-pixel-9a',
+      template: 'bold-headline',
+      screenshot: 'onboarding.png',
+      frame: { id: 'pixel-9a', color: 'iris' },
+      copy: { headline: { 'en-US': 'Pixel 9a' } },
+    },
+    {
+      id: '07-generic-android',
+      template: 'bold-headline',
+      screenshot: 'onboarding.png',
+      frame: { id: 'generic-android', color: 'graphite' },
+      copy: { headline: { 'en-US': 'Generic' } },
+    },
   ],
 });
 `;
@@ -84,6 +112,22 @@ describe('renderSlot', () => {
     ['03-overlap', 'overlap'],
   ] as const) {
     it(`renders a valid in-constraint PNG with '${template}' (slot ${slotId})`, async () => {
+      const buf = await renderSlot(server, slotId, 'en-US', 'phone');
+      const meta = await sharp(buf).metadata();
+      expect(meta.format).toBe('png');
+      expect(meta.width).toBe(1080);
+      expect(meta.height).toBe(1920);
+      expect(buf.byteLength).toBeLessThanOrEqual(8 * 1024 * 1024);
+    }, 180_000);
+  }
+
+  for (const [slotId, frameId] of [
+    ['04-pixel-9-pro', 'pixel-9-pro'],
+    ['05-pixel-9-pro-xl', 'pixel-9-pro-xl'],
+    ['06-pixel-9a', 'pixel-9a'],
+    ['07-generic-android', 'generic-android'],
+  ] as const) {
+    it(`renders a valid in-constraint PNG with frame '${frameId}' (slot ${slotId})`, async () => {
       const buf = await renderSlot(server, slotId, 'en-US', 'phone');
       const meta = await sharp(buf).metadata();
       expect(meta.format).toBe('png');

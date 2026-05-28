@@ -2,11 +2,13 @@ import { promises as fs, existsSync } from 'node:fs';
 import type { ProjectPaths } from '../paths.js';
 import type { TemplateModule } from './types.js';
 import boldHeadline from './bold-headline/index.js';
+import showcase from './showcase/index.js';
 
 /** Static map of built-in template id → module. Single source of truth for built-ins.
  *  Static (not dynamic globbing) so it still resolves after bundling to dist/ in M7. */
 export const BUILTIN_MODULES: Record<string, TemplateModule> = {
   'bold-headline': boldHeadline,
+  showcase,
 };
 
 /** Built-in template ids shipped with the package, derived from BUILTIN_MODULES. */

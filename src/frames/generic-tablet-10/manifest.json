@@ -1,0 +1,28 @@
+{
+  "id": "generic-tablet-10",
+  "displayName": "Generic 10\" Tablet",
+  "manufacturer": "Generic",
+  "colors": [
+    "graphite"
+  ],
+  "intrinsic": {
+    "width": 1000,
+    "height": 1600
+  },
+  "screen": {
+    "x": 40,
+    "y": 64,
+    "width": 920,
+    "height": 1472,
+    "radius": 30
+  },
+  "shadow": {
+    "x": 0,
+    "y": 24,
+    "blur": 64,
+    "color": "rgba(0,0,0,0.18)"
+  },
+  "files": {
+    "graphite": "graphite.svg"
+  }
+}

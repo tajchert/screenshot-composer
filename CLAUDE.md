@@ -94,7 +94,10 @@ same id. The route is unchanged.
 | `src/templates/resolve.ts` | `resolveTemplate(id, paths)` — project-local (jiti) then built-in |
 | `src/templates/validate.ts` | `validateSlotTemplates()` — required-copy preflight before Chromium launches |
 | `src/frames/load.ts` | `listFrames()`, `loadManifest()`, `loadFrame()`, `listFrameInfos()` |
-| `src/frames/pixel-9/` | `manifest.json` + `obsidian.svg` (clean-room) |
+| `src/frames/schema.ts` | Zod `FrameManifestSchema` + inferred `FrameManifest` type |
+| `src/frames/<id>/` | `manifest.json` + one clean-room `<color>.svg` per colorway (8 built-in frames) |
+| `src/frames/_build/svg.ts` | Pure SVG builders (`buildPhoneSvg`, `buildTabletSvg`) — offline tooling |
+| `src/frames/_build/generate.ts` | Frame generator: writes every manifest + SVG from a typed spec; run via `npm run frames:build` |
 | `src/commands/*.ts` | One thin `runX()` per CLI command (init/generate/doctor/clean/templatesList/framesList) |
 
 ## Key decisions & gotchas (read before editing render code)
@@ -131,15 +134,24 @@ unit tests but would have broken the real CLI:
 
 ## How to add a device frame (works today)
 
-1. Create `src/frames/<id>/manifest.json` (`id`, `displayName`, `manufacturer`, `colors`,
-   `intrinsic {width,height}`, `screen {x,y,width,height,radius}`, optional `shadow`, and a
-   `files` map of color→svg filename). The `screen` rect is in intrinsic coordinates; the
-   template positions the screenshot using these as percentages.
-2. Add one clean-room `<color>.svg` per color: `viewBox` matching `intrinsic`, a transparent
-   rounded-rect cutout over the screen area, body/buttons/camera as vector paths, **no raster
-   `<image>` elements, no remote resources**.
-3. `listFrames()` auto-discovers any directory containing a `manifest.json`. Reference it in a
-   config slot as `frame: { id: '<id>', color: '<color>' }`.
+Every built-in frame is produced by the generator at `src/frames/_build/generate.ts` from a
+single typed spec list, so adding a frame is a data-only change.
+
+1. Open `src/frames/_build/generate.ts` and add a `PhoneSpec` or `TabletSpec` entry to the
+   `FRAMES` array. Provide `id`, `displayName`, `manufacturer`, `intrinsic {width,height}`,
+   `screen {x,y,width,height,radius}` (in intrinsic coordinates), optional `shadow`, and a
+   `colorways` map of color name → `PhoneColorway` (body gradient, bezelInner, button, camera)
+   or `TabletColorway` (no button). Reuse existing colorway constants where they fit.
+2. Run `npm run frames:build`. The script writes `src/frames/<id>/manifest.json` and one
+   `<color>.svg` per colorway using `buildPhoneSvg` / `buildTabletSvg`. SVGs are clean-room:
+   `viewBox` matches `intrinsic`, screen is masked out for the screenshot to show through, no
+   `<image>` rasters, no remote refs.
+3. `listFrames()` auto-discovers any directory containing a `manifest.json`, and
+   `tests/frames-structural.test.ts` validates every frame on disk — no per-frame test code
+   needed. Reference the frame in a config slot as `frame: { id: '<id>', color: '<color>' }`.
+
+Tablet frames are catalogued but `resolveDimensions` is phone-only until Milestone 5; until
+then they ship as validated assets that `frames list` shows but `generate` cannot render.
 
 ## How to add a template (works today)
 
@@ -178,7 +190,7 @@ plan (`docs/superpowers/plans/`) → execute one milestone at a time with per-ta
 two-stage (spec + code-quality) review. When picking up the next milestone, read its plan;
 cross-milestone follow-ups raised during review are recorded as **backlog notes** at the
 bottom of the relevant plan (e.g. the M1 plan's "Milestone 2 backlog", the M2 plan's
-deferred items). Current state: **Milestones 1–3 complete**; next is **Milestone 4 (device frames)**.
+deferred items). Current state: **Milestones 1–4 complete**; next is **Milestone 5 (form factors, theming, tilt)**.
 
 When you finish a feature, follow the same loop: keep the design doc/plan in
 `docs/superpowers/` authoritative, update README/CLAUDE if the user-facing surface or

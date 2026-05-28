@@ -1,0 +1,28 @@
+{
+  "id": "generic-tablet-7",
+  "displayName": "Generic 7\" Tablet",
+  "manufacturer": "Generic",
+  "colors": [
+    "graphite"
+  ],
+  "intrinsic": {
+    "width": 900,
+    "height": 1500
+  },
+  "screen": {
+    "x": 36,
+    "y": 60,
+    "width": 828,
+    "height": 1380,
+    "radius": 27
+  },
+  "shadow": {
+    "x": 0,
+    "y": 24,
+    "blur": 64,
+    "color": "rgba(0,0,0,0.18)"
+  },
+  "files": {
+    "graphite": "graphite.svg"
+  }
+}

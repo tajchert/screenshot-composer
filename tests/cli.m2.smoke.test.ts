@@ -17,11 +17,21 @@ describe('CLI M2 smoke', () => {
     expect(res.stdout).toContain('playwright');
   });
 
-  it('frames list prints pixel-9', async () => {
+  it('frames list prints every built-in frame', async () => {
     const res = await cli(['frames', 'list'], repoRoot);
     expect(res.exitCode).toBe(0);
-    expect(res.stdout).toContain('pixel-9');
-    expect(res.stdout).toContain('Pixel 9');
+    for (const id of [
+      'pixel-9',
+      'pixel-9-pro',
+      'pixel-9-pro-xl',
+      'pixel-9a',
+      'pixel-tablet',
+      'generic-android',
+      'generic-tablet-7',
+      'generic-tablet-10',
+    ]) {
+      expect(res.stdout).toContain(id);
+    }
   });
 
   it('templates list prints all built-in templates', async () => {

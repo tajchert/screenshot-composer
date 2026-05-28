@@ -1,19 +1,11 @@
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { promises as fs, existsSync } from 'node:fs';
+import { FrameManifestSchema, type FrameManifest } from './schema.js';
+
+export type { FrameManifest } from './schema.js';
 
 const FRAMES_DIR = path.dirname(fileURLToPath(import.meta.url));
-
-export interface FrameManifest {
-  id: string;
-  displayName: string;
-  manufacturer: string;
-  colors: string[];
-  intrinsic: { width: number; height: number };
-  screen: { x: number; y: number; width: number; height: number; radius: number };
-  shadow?: { x: number; y: number; blur: number; color: string };
-  files: Record<string, string>;
-}
 
 export async function listFrames(): Promise<string[]> {
   const entries = await fs.readdir(FRAMES_DIR, { withFileTypes: true });
@@ -24,7 +16,7 @@ export async function listFrames(): Promise<string[]> {
     .sort();
 }
 
-/** Read and parse manifest.json for a frame, without loading the SVG. */
+/** Read, parse, and Zod-validate manifest.json for a frame. */
 export async function loadManifest(id: string): Promise<FrameManifest> {
   const dir = path.join(FRAMES_DIR, id);
   let raw: string;
@@ -33,7 +25,20 @@ export async function loadManifest(id: string): Promise<FrameManifest> {
   } catch {
     throw new Error(`Unknown frame: '${id}'`);
   }
-  return JSON.parse(raw) as FrameManifest;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (err) {
+    throw new Error(`Frame '${id}' has invalid manifest.json: ${(err as Error).message}`);
+  }
+  const result = FrameManifestSchema.safeParse(parsed);
+  if (!result.success) {
+    const issues = result.error.issues
+      .map((i) => `  - ${i.path.length ? i.path.join('.') : '(root)'}: ${i.message}`)
+      .join('\n');
+    throw new Error(`Frame '${id}' has invalid manifest:\n${issues}`);
+  }
+  return result.data;
 }
 
 export async function loadFrame(
@@ -41,14 +46,13 @@ export async function loadFrame(
   color?: string,
 ): Promise<{ manifest: FrameManifest; svg: string; color: string }> {
   const manifest = await loadManifest(id);
-  const resolved = color && manifest.files[color] ? color : manifest.colors?.[0];
+  const resolved = color && manifest.files[color] ? color : manifest.colors[0];
   if (!resolved || !manifest.files[resolved]) {
     throw new Error(`Frame '${id}' has no usable color/svg files`);
   }
-  const chosen = resolved;
   const dir = path.join(FRAMES_DIR, id);
-  const svg = await fs.readFile(path.join(dir, manifest.files[chosen]), 'utf8');
-  return { manifest, svg, color: chosen };
+  const svg = await fs.readFile(path.join(dir, manifest.files[resolved]), 'utf8');
+  return { manifest, svg, color: resolved };
 }
 
 export interface FrameInfo {
@@ -57,7 +61,6 @@ export interface FrameInfo {
   colors: string[];
 }
 
-/** List built-in frames with display name and available colors. */
 export async function listFrameInfos(): Promise<FrameInfo[]> {
   const ids = await listFrames();
   const infos: FrameInfo[] = [];

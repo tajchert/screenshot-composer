@@ -1,10 +1,9 @@
 {
-  "id": "pixel-9",
-  "displayName": "Pixel 9",
-  "manufacturer": "Google",
+  "id": "generic-android",
+  "displayName": "Generic Android",
+  "manufacturer": "Generic",
   "colors": [
-    "obsidian",
-    "porcelain"
+    "graphite"
   ],
   "intrinsic": {
     "width": 800,
@@ -24,7 +23,6 @@
     "color": "rgba(0,0,0,0.18)"
   },
   "files": {
-    "obsidian": "obsidian.svg",
-    "porcelain": "porcelain.svg"
+    "graphite": "graphite.svg"
   }
 }

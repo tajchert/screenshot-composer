@@ -1,21 +1,21 @@
 {
-  "id": "pixel-9",
-  "displayName": "Pixel 9",
+  "id": "pixel-9-pro-xl",
+  "displayName": "Pixel 9 Pro XL",
   "manufacturer": "Google",
   "colors": [
     "obsidian",
     "porcelain"
   ],
   "intrinsic": {
-    "width": 800,
-    "height": 1700
+    "width": 820,
+    "height": 1826
   },
   "screen": {
-    "x": 28,
-    "y": 30,
-    "width": 744,
-    "height": 1640,
-    "radius": 44
+    "x": 29,
+    "y": 32,
+    "width": 762,
+    "height": 1762,
+    "radius": 45
   },
   "shadow": {
     "x": 0,

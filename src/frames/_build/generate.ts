@@ -80,6 +80,24 @@ const GRAPHITE: PhoneColorway = {
   camera: '#08080a',
 };
 
+const TABLET_PORCELAIN: TabletColorway = {
+  body: { top: '#f3eee5', bottom: '#dfd8c8' },
+  bezelInner: '#1a1815',
+  camera: '#1a1916',
+};
+
+const TABLET_HAZEL: TabletColorway = {
+  body: { top: '#6d6a55', bottom: '#43412f' },
+  bezelInner: '#0c0c0a',
+  camera: '#0a0a08',
+};
+
+const TABLET_GRAPHITE: TabletColorway = {
+  body: { top: '#4b4f55', bottom: '#23262a' },
+  bezelInner: '#0c0c0e',
+  camera: '#08080a',
+};
+
 const FRAMES: FrameSpec[] = [
   {
     form: 'phone',
@@ -130,6 +148,36 @@ const FRAMES: FrameSpec[] = [
     screen: { x: 28, y: 30, width: 744, height: 1640, radius: 44 },
     shadow: SHADOW,
     colorways: { graphite: GRAPHITE },
+  },
+  {
+    form: 'tablet',
+    id: 'pixel-tablet',
+    displayName: 'Pixel Tablet',
+    manufacturer: 'Google',
+    intrinsic: { width: 1000, height: 1600 },
+    screen: { x: 40, y: 64, width: 920, height: 1472, radius: 30 },
+    shadow: SHADOW,
+    colorways: { porcelain: TABLET_PORCELAIN, hazel: TABLET_HAZEL },
+  },
+  {
+    form: 'tablet',
+    id: 'generic-tablet-7',
+    displayName: 'Generic 7" Tablet',
+    manufacturer: 'Generic',
+    intrinsic: { width: 900, height: 1500 },
+    screen: { x: 36, y: 60, width: 828, height: 1380, radius: 27 },
+    shadow: SHADOW,
+    colorways: { graphite: TABLET_GRAPHITE },
+  },
+  {
+    form: 'tablet',
+    id: 'generic-tablet-10',
+    displayName: 'Generic 10" Tablet',
+    manufacturer: 'Generic',
+    intrinsic: { width: 1000, height: 1600 },
+    screen: { x: 40, y: 64, width: 920, height: 1472, radius: 30 },
+    shadow: SHADOW,
+    colorways: { graphite: TABLET_GRAPHITE },
   },
 ];
 

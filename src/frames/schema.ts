@@ -30,6 +30,7 @@ export const FrameManifestSchema = z
     screen: screenSchema,
     shadow: shadowSchema.optional(),
     files: z.record(z.string(), z.string().min(1)),
+    // Optional in the schema for back-compat/robustness; the built-in generator always emits license (Apache-2.0 for AOSP-derived frames, MIT for generics).
     source: z.string().min(1).optional(),
     license: z.string().min(1).optional(),
   })

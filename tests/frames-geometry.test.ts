@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { loadManifest } from '../src/frames/load.js';
 
 // Exact AOSP-derived geometry (committed into generate.ts). Guards against drift.
+// Generic (non-AOSP) frames are not listed here; their geometry is covered by frames-structural.test.ts.
 const EXPECTED: Record<string, { intrinsic: [number, number]; screen: [number, number, number, number, number] }> = {
   'pixel-9':        { intrinsic: [1198, 2531], screen: [55, 58, 1080, 2424, 87] },
   'pixel-9-pro':    { intrinsic: [1408, 2974], screen: [60, 61, 1280, 2856, 109] },

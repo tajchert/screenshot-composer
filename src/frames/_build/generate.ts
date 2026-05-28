@@ -69,9 +69,6 @@ const GRAPHITE: PhoneColorway = {
 const SNOW: PhoneColorway = {
   metal: { top: '#fdfdfd', bottom: '#d6d8db' }, rim: '#ffffff', bezel: '#0b0b0c', button: '#c4c6ca', camera: '#101012',
 };
-const BAY: PhoneColorway = {
-  metal: { top: '#6f93c7', bottom: '#2f4d77' }, rim: '#9db8e0', bezel: '#0a0d12', button: '#284066', camera: '#0a0d14',
-};
 const CORAL: PhoneColorway = {
   metal: { top: '#f3a38c', bottom: '#c4624a' }, rim: '#ffc4b2', bezel: '#120a08', button: '#a14e38', camera: '#140a08',
 };
@@ -85,9 +82,6 @@ const TABLET_HAZEL: TabletColorway = {
 const TABLET_GRAPHITE: TabletColorway = {
   metal: { top: '#646a72', bottom: '#23262a' }, rim: '#878d95', bezel: '#08080a', camera: '#08080a',
 };
-
-// BAY is defined but not yet used in the FRAMES list; kept for future colorways.
-void BAY;
 
 const FRAMES: FrameSpec[] = [
   {

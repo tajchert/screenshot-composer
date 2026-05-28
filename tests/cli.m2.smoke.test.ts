@@ -24,10 +24,12 @@ describe('CLI M2 smoke', () => {
     expect(res.stdout).toContain('Pixel 9');
   });
 
-  it('templates list prints bold-headline', async () => {
+  it('templates list prints all built-in templates', async () => {
     const res = await cli(['templates', 'list'], repoRoot);
     expect(res.exitCode).toBe(0);
     expect(res.stdout).toContain('bold-headline');
+    expect(res.stdout).toContain('showcase');
+    expect(res.stdout).toContain('overlap');
   });
 
   it('doctor runs and prints the Node check', async () => {

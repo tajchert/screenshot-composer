@@ -1,8 +1,20 @@
 import { promises as fs, existsSync } from 'node:fs';
 import type { ProjectPaths } from '../paths.js';
+import type { TemplateModule } from './types.js';
+import boldHeadline from './bold-headline/index.js';
+import showcase from './showcase/index.js';
+import overlap from './overlap/index.js';
 
-/** Built-in template ids shipped with the package. Expanded by the resolver in Milestone 3. */
-export const BUILTIN_TEMPLATES = ['bold-headline'] as const;
+/** Static map of built-in template id → module. Single source of truth for built-ins.
+ *  Static (not dynamic globbing) so it still resolves after bundling to dist/ in M7. */
+export const BUILTIN_MODULES: Record<string, TemplateModule> = {
+  'bold-headline': boldHeadline,
+  showcase,
+  overlap,
+};
+
+/** Built-in template ids shipped with the package, derived from BUILTIN_MODULES. */
+export const BUILTIN_TEMPLATES = Object.keys(BUILTIN_MODULES);
 
 export interface TemplateInfo {
   id: string;

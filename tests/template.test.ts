@@ -1,10 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { renderHtml, type TemplateProps } from '../src/templates/bold-headline/render.js';
+import boldHeadline, { meta, render } from '../src/templates/bold-headline/index.js';
+import type { TemplateProps } from '../src/templates/types.js';
 
 const props: TemplateProps = {
   width: 1080,
   height: 1920,
-  headline: 'Order in seconds',
+  copy: { headline: 'Order in seconds' },
   screenshotUrl: '/input/en-US/phone/onboarding.png',
   frame: {
     intrinsic: { width: 800, height: 1700 },
@@ -19,9 +20,15 @@ const props: TemplateProps = {
   },
 };
 
-describe('bold-headline renderHtml', () => {
+describe('bold-headline template', () => {
+  it('declares meta with a required headline field', () => {
+    expect(meta.id).toBe('bold-headline');
+    expect(boldHeadline.meta.id).toBe('bold-headline');
+    expect(meta.copyFields.find((f) => f.key === 'headline')?.required).toBe(true);
+  });
+
   it('embeds the headline, screenshot, frame svg and readiness signal', () => {
-    const html = renderHtml(props);
+    const html = render(props);
     expect(html).toContain('<!DOCTYPE html>');
     expect(html).toContain('Order in seconds');
     expect(html).toContain('/input/en-US/phone/onboarding.png');
@@ -32,14 +39,14 @@ describe('bold-headline renderHtml', () => {
   });
 
   it('applies the tilt transform from layout', () => {
-    const html = renderHtml(props);
+    const html = render(props);
     expect(html).toContain('rotateX(4deg)');
     expect(html).toContain('rotateY(-18deg)');
     expect(html).toContain('perspective(2000px)');
   });
 
   it('escapes special characters in the headline', () => {
-    const html = renderHtml({ ...props, headline: '<b>Fast</b> & "cheap"' });
+    const html = render({ ...props, copy: { headline: '<b>Fast</b> & "cheap"' } });
     expect(html).toContain('&lt;b&gt;Fast&lt;/b&gt; &amp; &quot;cheap&quot;');
     expect(html).not.toContain('<b>Fast</b>');
   });

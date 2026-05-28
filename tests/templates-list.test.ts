@@ -6,11 +6,15 @@ import { listTemplates, BUILTIN_TEMPLATES } from '../src/templates/registry.js';
 import { projectPaths } from '../src/paths.js';
 
 describe('listTemplates', () => {
-  it('lists the built-in templates including bold-headline', async () => {
+  it('lists the built-in templates including bold-headline, showcase, and overlap', async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'sc-tpl-'));
     const list = await listTemplates(projectPaths(root));
     expect(BUILTIN_TEMPLATES).toContain('bold-headline');
+    expect(BUILTIN_TEMPLATES).toContain('showcase');
+    expect(BUILTIN_TEMPLATES).toContain('overlap');
     expect(list.some((t) => t.id === 'bold-headline' && t.source === 'built-in')).toBe(true);
+    expect(list.some((t) => t.id === 'showcase' && t.source === 'built-in')).toBe(true);
+    expect(list.some((t) => t.id === 'overlap' && t.source === 'built-in')).toBe(true);
   });
 
   it('includes project-local template directories', async () => {

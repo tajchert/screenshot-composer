@@ -1,0 +1,115 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { promises as fs } from 'node:fs';
+import { buildPhoneSvg, buildTabletSvg } from './svg.js';
+import type { FrameManifest } from '../schema.js';
+
+const FRAMES_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+interface PhoneColorway {
+  body: { top: string; bottom: string };
+  bezelInner: string;
+  button: string;
+  camera: string;
+}
+
+interface TabletColorway {
+  body: { top: string; bottom: string };
+  bezelInner: string;
+  camera: string;
+}
+
+interface PhoneSpec {
+  form: 'phone';
+  id: string;
+  displayName: string;
+  manufacturer: string;
+  intrinsic: FrameManifest['intrinsic'];
+  screen: FrameManifest['screen'];
+  shadow?: FrameManifest['shadow'];
+  colorways: Record<string, PhoneColorway>;
+}
+
+interface TabletSpec {
+  form: 'tablet';
+  id: string;
+  displayName: string;
+  manufacturer: string;
+  intrinsic: FrameManifest['intrinsic'];
+  screen: FrameManifest['screen'];
+  shadow?: FrameManifest['shadow'];
+  colorways: Record<string, TabletColorway>;
+}
+
+type FrameSpec = PhoneSpec | TabletSpec;
+
+const SHADOW: FrameManifest['shadow'] = { x: 0, y: 24, blur: 64, color: 'rgba(0,0,0,0.18)' };
+
+const OBSIDIAN: PhoneColorway = {
+  body: { top: '#2b2b2f', bottom: '#0e0e10' },
+  bezelInner: '#000000',
+  button: '#1a1a1c',
+  camera: '#070708',
+};
+
+const FRAMES: FrameSpec[] = [
+  {
+    form: 'phone',
+    id: 'pixel-9',
+    displayName: 'Pixel 9',
+    manufacturer: 'Google',
+    intrinsic: { width: 800, height: 1700 },
+    screen: { x: 28, y: 30, width: 744, height: 1640, radius: 44 },
+    shadow: SHADOW,
+    colorways: { obsidian: OBSIDIAN },
+  },
+];
+
+async function writeFrame(spec: FrameSpec): Promise<void> {
+  const dir = path.join(FRAMES_DIR, spec.id);
+  await fs.mkdir(dir, { recursive: true });
+  const colors = Object.keys(spec.colorways);
+  const files: Record<string, string> = {};
+  for (const color of colors) {
+    files[color] = `${color}.svg`;
+  }
+  const manifest: FrameManifest = {
+    id: spec.id,
+    displayName: spec.displayName,
+    manufacturer: spec.manufacturer,
+    colors,
+    intrinsic: spec.intrinsic,
+    screen: spec.screen,
+    ...(spec.shadow ? { shadow: spec.shadow } : {}),
+    files,
+  };
+  await fs.writeFile(
+    path.join(dir, 'manifest.json'),
+    JSON.stringify(manifest, null, 2) + '\n',
+    'utf8',
+  );
+  for (const color of colors) {
+    let svg: string;
+    if (spec.form === 'phone') {
+      const cw = spec.colorways[color];
+      svg = buildPhoneSvg({ intrinsic: spec.intrinsic, screen: spec.screen, ...cw });
+    } else {
+      const cw = spec.colorways[color];
+      svg = buildTabletSvg({ intrinsic: spec.intrinsic, screen: spec.screen, ...cw });
+    }
+    await fs.writeFile(path.join(dir, `${color}.svg`), svg, 'utf8');
+  }
+}
+
+async function main(): Promise<void> {
+  for (const spec of FRAMES) {
+    await writeFrame(spec);
+    console.error(`✓ ${spec.id} (${Object.keys(spec.colorways).join(', ')})`);
+  }
+  console.error(`Generated ${FRAMES.length} frame(s) in ${FRAMES_DIR}`);
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

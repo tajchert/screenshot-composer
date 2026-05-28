@@ -1,0 +1,30 @@
+{
+  "id": "pixel-9-pro",
+  "displayName": "Pixel 9 Pro",
+  "manufacturer": "Google",
+  "colors": [
+    "obsidian",
+    "hazel"
+  ],
+  "intrinsic": {
+    "width": 800,
+    "height": 1786
+  },
+  "screen": {
+    "x": 28,
+    "y": 32,
+    "width": 744,
+    "height": 1722,
+    "radius": 44
+  },
+  "shadow": {
+    "x": 0,
+    "y": 24,
+    "blur": 64,
+    "color": "rgba(0,0,0,0.18)"
+  },
+  "files": {
+    "obsidian": "obsidian.svg",
+    "hazel": "hazel.svg"
+  }
+}

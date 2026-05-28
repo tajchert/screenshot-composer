@@ -59,6 +59,13 @@ const PORCELAIN: PhoneColorway = {
   camera: '#1a1916',
 };
 
+const HAZEL: PhoneColorway = {
+  body: { top: '#6d6a55', bottom: '#43412f' },
+  bezelInner: '#0c0c0a',
+  button: '#34322a',
+  camera: '#0a0a08',
+};
+
 const FRAMES: FrameSpec[] = [
   {
     form: 'phone',
@@ -67,6 +74,26 @@ const FRAMES: FrameSpec[] = [
     manufacturer: 'Google',
     intrinsic: { width: 800, height: 1700 },
     screen: { x: 28, y: 30, width: 744, height: 1640, radius: 44 },
+    shadow: SHADOW,
+    colorways: { obsidian: OBSIDIAN, porcelain: PORCELAIN },
+  },
+  {
+    form: 'phone',
+    id: 'pixel-9-pro',
+    displayName: 'Pixel 9 Pro',
+    manufacturer: 'Google',
+    intrinsic: { width: 800, height: 1786 },
+    screen: { x: 28, y: 32, width: 744, height: 1722, radius: 44 },
+    shadow: SHADOW,
+    colorways: { obsidian: OBSIDIAN, hazel: HAZEL },
+  },
+  {
+    form: 'phone',
+    id: 'pixel-9-pro-xl',
+    displayName: 'Pixel 9 Pro XL',
+    manufacturer: 'Google',
+    intrinsic: { width: 820, height: 1826 },
+    screen: { x: 29, y: 32, width: 762, height: 1762, radius: 45 },
     shadow: SHADOW,
     colorways: { obsidian: OBSIDIAN, porcelain: PORCELAIN },
   },

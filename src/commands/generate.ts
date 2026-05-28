@@ -8,6 +8,7 @@ import { renderSlot } from '../render/renderSlot.js';
 import { closeBrowser } from '../render/browser.js';
 import { extFor } from '../render/constraints.js';
 import type { FormFactorT } from '../config/schema.js';
+import { validateSlotTemplates } from '../templates/validate.js';
 
 export interface GenerateOptions {
   locale?: string;
@@ -18,6 +19,7 @@ export interface GenerateOptions {
 export async function runGenerate(root: string, opts: GenerateOptions): Promise<void> {
   const paths = projectPaths(root);
   const config = await loadConfig(paths.config);
+  await validateSlotTemplates(config, paths);
 
   const locales = opts.locale ? [opts.locale] : config.locales;
   const formats = opts.format ? [opts.format] : config.formFactors;

@@ -49,4 +49,19 @@ describe('FrameManifestSchema', () => {
     const r = FrameManifestSchema.safeParse(noShadow);
     expect(r.success).toBe(true);
   });
+
+  it('accepts optional source and license provenance fields', () => {
+    const withProvenance = { ...valid, source: 'AOSP emulator skin pixel_9', license: 'Apache-2.0' };
+    const r = FrameManifestSchema.safeParse(withProvenance);
+    expect(r.success).toBe(true);
+    if (r.success) {
+      expect(r.data.source).toBe('AOSP emulator skin pixel_9');
+      expect(r.data.license).toBe('Apache-2.0');
+    }
+  });
+
+  it('still accepts a manifest with no provenance fields (back-compat)', () => {
+    const r = FrameManifestSchema.safeParse(valid);
+    expect(r.success).toBe(true);
+  });
 });

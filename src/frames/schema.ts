@@ -30,6 +30,8 @@ export const FrameManifestSchema = z
     screen: screenSchema,
     shadow: shadowSchema.optional(),
     files: z.record(z.string(), z.string().min(1)),
+    source: z.string().min(1).optional(),
+    license: z.string().min(1).optional(),
   })
   .superRefine((m, ctx) => {
     if (m.screen.x + m.screen.width > m.intrinsic.width) {

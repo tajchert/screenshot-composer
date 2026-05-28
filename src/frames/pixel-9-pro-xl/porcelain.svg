@@ -1,17 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 1826" width="820" height="1826">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1466 3101" width="1466" height="3101">
   <defs>
-    <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#f5f1ea"/>
-      <stop offset="1" stop-color="#e2dccf"/>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbf8f2"/>
+      <stop offset="1" stop-color="#d8d2c6"/>
     </linearGradient>
     <mask id="screenHole">
-      <rect x="0" y="0" width="820" height="1826" fill="#fff"/>
-      <rect x="29" y="32" width="762" height="1762" rx="45" ry="45" fill="#000"/>
+      <rect x="0" y="0" width="1466" height="3101" fill="#fff"/>
+      <rect x="57" y="56" width="1344" height="2992" rx="108" ry="108" fill="#000"/>
     </mask>
   </defs>
-  <rect x="2" y="2" width="816" height="1822" rx="72" ry="72" fill="url(#body)" mask="url(#screenHole)"/>
-  <rect x="25" y="28" width="770" height="1770" rx="49" ry="49" fill="none" stroke="#1f1d1a" stroke-width="6"/>
-  <circle cx="410" cy="18" r="11" fill="#1a1916"/>
-  <rect x="812" y="383" width="10" height="164" rx="5" fill="#c8c0b1"/>
-  <rect x="812" y="603" width="10" height="91" rx="5" fill="#c8c0b1"/>
+  <rect x="2" y="2" width="1462" height="3097" rx="159" ry="159" fill="url(#metal)" mask="url(#screenHole)"/>
+  <rect x="2" y="2" width="1462" height="3097" rx="159" ry="159" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <rect x="19" y="19" width="1428" height="3063" rx="142" ry="142" fill="#0b0a09" mask="url(#screenHole)"/>
+  <circle cx="733" cy="31" r="21" fill="#1a1916"/>
+  <rect x="1458" y="651" width="10" height="279" rx="5" fill="#c8c0b1"/>
+  <rect x="1458" y="1023" width="10" height="155" rx="5" fill="#c8c0b1"/>
 </svg>

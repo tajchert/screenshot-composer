@@ -10,10 +10,10 @@ describe('frames', () => {
   it('loads the pixel-9 manifest and svg, defaulting the color', async () => {
     const { manifest, svg } = await loadFrame('pixel-9');
     expect(manifest.id).toBe('pixel-9');
-    expect(manifest.screen.width).toBe(744);
-    expect(manifest.intrinsic).toEqual({ width: 800, height: 1700 });
+    expect(manifest.screen.width).toBe(1080);
+    expect(manifest.intrinsic).toEqual({ width: 1198, height: 2531 });
     expect(svg).toContain('<svg');
-    expect(svg).toContain('viewBox="0 0 800 1700"');
+    expect(svg).toContain('viewBox="0 0 1198 2531"');
   });
 
   it('throws a clear error for an unknown frame', async () => {

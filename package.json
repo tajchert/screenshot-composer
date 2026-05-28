@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Compose Google Play Store screenshots from Android app screenshots",
   "type": "module",
-  "license": "MIT",
+  "license": "MIT AND Apache-2.0",
   "engines": { "node": ">=20" },
   "bin": { "screenshot-composer": "dist/cli.js" },
   "main": "dist/index.js",
@@ -11,7 +11,8 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "cli": "tsx src/cli.ts",
-    "frames:build": "tsx src/frames/_build/generate.ts"
+    "frames:build": "tsx src/frames/_build/generate.ts",
+    "frames:extract": "tsx src/frames/_build/extract-aosp.ts"
   },
   "dependencies": {
     "commander": "^12.1.0",

@@ -7,15 +7,15 @@
     "hazel"
   ],
   "intrinsic": {
-    "width": 1000,
-    "height": 1600
+    "width": 1837,
+    "height": 2798
   },
   "screen": {
-    "x": 40,
-    "y": 64,
-    "width": 920,
-    "height": 1472,
-    "radius": 30
+    "x": 117,
+    "y": 119,
+    "width": 1600,
+    "height": 2560,
+    "radius": 48
   },
   "shadow": {
     "x": 0,
@@ -23,6 +23,8 @@
     "blur": 64,
     "color": "rgba(0,0,0,0.18)"
   },
+  "source": "AOSP emulator skin pixel_tablet (portrait transpose)",
+  "license": "Apache-2.0",
   "files": {
     "porcelain": "porcelain.svg",
     "hazel": "hazel.svg"

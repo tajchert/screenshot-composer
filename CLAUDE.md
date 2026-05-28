@@ -15,8 +15,9 @@ in one Node process; there is no server, database, or network call at render tim
 one-time Chromium download.
 
 **Hard scope boundaries** (do not cross without a design change): local-only, no Play upload,
-we *consume* screenshots and never *capture* them, frames are clean-room SVG redrawn assets,
-MIT-licensed.
+we *consume* screenshots and never *capture* them, frames are clean-room SVG redrawn assets
+(the project is MIT; Google-device frame geometry is derived from AOSP emulator skins under
+Apache-2.0 — see NOTICE).
 
 ## Dev workflow
 
@@ -95,7 +96,7 @@ same id. The route is unchanged.
 | `src/templates/validate.ts` | `validateSlotTemplates()` — required-copy preflight before Chromium launches |
 | `src/frames/load.ts` | `listFrames()`, `loadManifest()`, `loadFrame()`, `listFrameInfos()` |
 | `src/frames/schema.ts` | Zod `FrameManifestSchema` + inferred `FrameManifest` type |
-| `src/frames/<id>/` | `manifest.json` + one clean-room `<color>.svg` per colorway (8 built-in frames) |
+| `src/frames/<id>/` | `manifest.json` + one clean-room `<color>.svg` per colorway (14 built-in frames) |
 | `src/frames/_build/svg.ts` | Pure SVG builders (`buildPhoneSvg`, `buildTabletSvg`) — offline tooling |
 | `src/frames/_build/generate.ts` | Frame generator: writes every manifest + SVG from a typed spec; run via `npm run frames:build` |
 | `src/commands/*.ts` | One thin `runX()` per CLI command (init/generate/doctor/clean/templatesList/framesList) |
@@ -149,6 +150,11 @@ single typed spec list, so adding a frame is a data-only change.
 3. `listFrames()` auto-discovers any directory containing a `manifest.json`, and
    `tests/frames-structural.test.ts` validates every frame on disk — no per-frame test code
    needed. Reference the frame in a config slot as `frame: { id: '<id>', color: '<color>' }`.
+
+Real-device geometry can be extracted from the local Android SDK skins with
+`npm run frames:extract -- <skin>` (offline dev tool; its output is committed into the FRAMES
+spec). Each manifest may carry `source`/`license` provenance fields (Apache-2.0 for
+AOSP-derived frames, MIT for generics).
 
 Tablet frames are catalogued but `resolveDimensions` is phone-only until Milestone 5; until
 then they ship as validated assets that `frames list` shows but `generate` cannot render.

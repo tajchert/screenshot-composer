@@ -1,15 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1600" width="1000" height="1600">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1837 2798" width="1837" height="2798">
   <defs>
-    <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#6d6a55"/>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8b8770"/>
       <stop offset="1" stop-color="#43412f"/>
     </linearGradient>
     <mask id="screenHole">
-      <rect x="0" y="0" width="1000" height="1600" fill="#fff"/>
-      <rect x="40" y="64" width="920" height="1472" rx="30" ry="30" fill="#000"/>
+      <rect x="0" y="0" width="1837" height="2798" fill="#fff"/>
+      <rect x="117" y="119" width="1600" height="2560" rx="48" ry="48" fill="#000"/>
     </mask>
   </defs>
-  <rect x="2" y="2" width="996" height="1596" rx="43" ry="43" fill="url(#body)" mask="url(#screenHole)"/>
-  <rect x="36" y="60" width="928" height="1480" rx="34" ry="34" fill="none" stroke="#0c0c0a" stroke-width="6"/>
-  <rect x="470" y="28" width="60" height="8" rx="4" ry="4" fill="#0a0a08"/>
+  <rect x="2" y="2" width="1833" height="2794" rx="163" ry="163" fill="url(#metal)" mask="url(#screenHole)"/>
+  <rect x="2" y="2" width="1833" height="2794" rx="163" ry="163" fill="none" stroke="#a7a288" stroke-width="3"/>
+  <rect x="41" y="41" width="1755" height="2716" rx="124" ry="124" fill="#0a0a08" mask="url(#screenHole)"/>
+  <rect x="864" y="52" width="110" height="15" rx="7.5" ry="7.5" fill="#0a0a08"/>
 </svg>

@@ -7,15 +7,15 @@
     "porcelain"
   ],
   "intrinsic": {
-    "width": 800,
-    "height": 1700
+    "width": 1198,
+    "height": 2531
   },
   "screen": {
-    "x": 28,
-    "y": 30,
-    "width": 744,
-    "height": 1640,
-    "radius": 44
+    "x": 55,
+    "y": 58,
+    "width": 1080,
+    "height": 2424,
+    "radius": 87
   },
   "shadow": {
     "x": 0,
@@ -23,6 +23,8 @@
     "blur": 64,
     "color": "rgba(0,0,0,0.18)"
   },
+  "source": "AOSP emulator skin pixel_9",
+  "license": "Apache-2.0",
   "files": {
     "obsidian": "obsidian.svg",
     "porcelain": "porcelain.svg"

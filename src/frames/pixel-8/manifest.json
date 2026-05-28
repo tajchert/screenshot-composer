@@ -1,21 +1,21 @@
 {
-  "id": "pixel-9-pro",
-  "displayName": "Pixel 9 Pro",
+  "id": "pixel-8",
+  "displayName": "Pixel 8",
   "manufacturer": "Google",
   "colors": [
     "obsidian",
     "hazel"
   ],
   "intrinsic": {
-    "width": 1408,
-    "height": 2974
+    "width": 1187,
+    "height": 2513
   },
   "screen": {
-    "x": 60,
-    "y": 61,
-    "width": 1280,
-    "height": 2856,
-    "radius": 109
+    "x": 49,
+    "y": 55,
+    "width": 1080,
+    "height": 2400,
+    "radius": 86
   },
   "shadow": {
     "x": 0,
@@ -23,7 +23,7 @@
     "blur": 64,
     "color": "rgba(0,0,0,0.18)"
   },
-  "source": "AOSP emulator skin pixel_9_pro",
+  "source": "AOSP emulator skin pixel_8",
   "license": "Apache-2.0",
   "files": {
     "obsidian": "obsidian.svg",

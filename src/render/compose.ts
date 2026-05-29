@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { existsSync } from 'node:fs';
-import type { Config, FormFactorT } from '../config/schema.js';
+import type { Config, FormFactorT, Slot } from '../config/schema.js';
 import type { ProjectPaths } from '../paths.js';
 import { loadFrame } from '../frames/load.js';
 import { resolveTemplate } from '../templates/resolve.js';
@@ -21,6 +21,15 @@ export function inputFilePath(paths: ProjectPaths, locale: string, format: strin
   return path.join(paths.inputs, locale, format, file);
 }
 
+/** Resolve every declared copy key for a locale, falling back to defaultLocale then ''. */
+export function resolveCopy(slot: Slot, locale: string, defaultLocale: string): Record<string, string> {
+  const copy: Record<string, string> = {};
+  for (const key of Object.keys(slot.copy)) {
+    copy[key] = slot.copy[key]?.[locale] ?? slot.copy[key]?.[defaultLocale] ?? '';
+  }
+  return copy;
+}
+
 export async function composeSlotHtml(config: Config, paths: ProjectPaths, ref: SlotRef): Promise<string> {
   const slot = config.slots.find((s) => s.id === ref.slotId);
   if (!slot) throw new RenderError(`No slot with id '${ref.slotId}' in config`);
@@ -32,11 +41,7 @@ export async function composeSlotHtml(config: Config, paths: ProjectPaths, ref: 
   const { manifest, imageDataUri, maskDataUri } = await loadFrame(slot.frame.id);
   const template = await resolveTemplate(slot.template, paths);
 
-  // Resolve every declared copy key for this locale, falling back to defaultLocale.
-  const copy: Record<string, string> = {};
-  for (const key of Object.keys(slot.copy)) {
-    copy[key] = slot.copy[key]?.[ref.locale] ?? slot.copy[key]?.[config.defaultLocale] ?? '';
-  }
+  const copy = resolveCopy(slot, ref.locale, config.defaultLocale);
 
   return template.render({
     width,

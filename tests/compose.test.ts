@@ -3,7 +3,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { promises as fs } from 'node:fs';
 import sharp from 'sharp';
-import { composeSlotHtml, inputUrl, inputFilePath } from '../src/render/compose.js';
+import { composeSlotHtml, inputUrl, inputFilePath, resolveCopy } from '../src/render/compose.js';
 import { loadConfig } from '../src/config/load.js';
 import { MissingInputError } from '../src/errors.js';
 import { projectPaths } from '../src/paths.js';
@@ -20,6 +20,24 @@ beforeAll(async () => {
     .png().toFile(path.join(p.inputs, 'en-US', 'phone', 'onboarding.png'));
   // copy the valid fixture config into the project
   await fs.copyFile(path.join(here, 'fixtures/valid.config.ts'), p.config);
+});
+
+describe('resolveCopy', () => {
+  const slot = {
+    copy: {
+      headline: { 'en-US': 'Hello', 'de-DE': 'Hallo' },
+      sub: { 'en-US': 'Only English' },
+    },
+  } as unknown as import('../src/config/schema.js').Slot;
+
+  it('uses the requested locale when present', () => {
+    expect(resolveCopy(slot, 'de-DE', 'en-US')).toEqual({ headline: 'Hallo', sub: 'Only English' });
+  });
+
+  it('falls back to defaultLocale then empty string', () => {
+    expect(resolveCopy(slot, 'fr-FR', 'en-US')).toEqual({ headline: 'Hello', sub: 'Only English' });
+    expect(resolveCopy(slot, 'fr-FR', 'ja-JP')).toEqual({ headline: '', sub: '' });
+  });
 });
 
 describe('compose', () => {

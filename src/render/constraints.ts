@@ -22,6 +22,10 @@ export function resolveDimensions(format: FormFactorT, orientation: Orientation 
       return portrait ? { width: 1200, height: 1920, scale: 1 } : { width: 1920, height: 1200, scale: 1 };
     case 'tablet10':
       return portrait ? { width: 1080, height: 1920, scale: 2 } : { width: 1920, height: 1080, scale: 2 };
+    default: {
+      const _exhaustive: never = format;
+      throw new Error(`Unhandled form factor: ${String(_exhaustive)}`);
+    }
   }
 }
 

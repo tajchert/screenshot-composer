@@ -1,7 +1,8 @@
 # Track B — Distribution & Packaging (notes)
 
-> Status: **not started.** This is a placeholder for a future brainstorm → spec → plan
-> cycle, not a design. Created 2026-05-29.
+> Status: **superseded** by the approved design at
+> [`2026-05-29-track-b-distribution-design.md`](2026-05-29-track-b-distribution-design.md).
+> Kept for history; read the design doc instead. Created 2026-05-29.
 
 This area covers making `screenshot-composer` **installable as a real binary** rather than
 run from source. Today `bin`/`main` point at a `dist/` that does not exist, the build is

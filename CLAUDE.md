@@ -145,6 +145,13 @@ is transparent over the display area and opaque-black only in the corner wedges,
 per-frame test code needed. Reference the frame in a config slot as
 `frame: { id: '<id>' }`.
 
+**`screen.radius` must match the real `back.webp` hole.** It drives the screenshot's CSS
+`border-radius`; if it overshoots the artwork's actual corner the rounded screenshot curves
+*inward* past the hole and the page background leaks through the corner gap. Many older skins
+omit `corner_radius` from their `layout`, so the importer measures it off `back.webp`
+(`frames/_build/frame-measure.ts`) instead of the old `0.08 * width` guess that caused exactly
+that bug. `tests/frames-geometry.test.ts` guards every frame's radius against its artwork.
+
 Tablet frames are catalogued but `resolveDimensions` is phone-only until Milestone 5; until
 then they ship as validated assets that `frames list` shows but `generate` cannot render.
 

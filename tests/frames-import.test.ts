@@ -33,4 +33,17 @@ describe('frame-import helpers', () => {
                   frame: { width: 1198, height: 2531 }, offset: { x: 55, y: 58 } };
     expect(buildFrameManifest('pixel_9', geo).screen.radius).toBe(87);
   });
+
+  it('prefers the measured artwork radius over the guess when the layout omits corner_radius', () => {
+    const geo = { display: { width: 1080, height: 2400 }, cornerRadius: null,
+                  frame: { width: 1226, height: 2559 }, offset: { x: 69, y: 69 } };
+    // pixel-7a: layout has no corner_radius; the artwork hole is 39 (the old guess was 86).
+    expect(buildFrameManifest('pixel_7a', geo, 39).screen.radius).toBe(39);
+  });
+
+  it('still falls back to the 0.08*width guess when neither layout nor artwork supply a radius', () => {
+    const geo = { display: { width: 1080, height: 2400 }, cornerRadius: null,
+                  frame: { width: 1226, height: 2559 }, offset: { x: 69, y: 69 } };
+    expect(buildFrameManifest('pixel_7a', geo, undefined).screen.radius).toBe(Math.round(0.08 * 1080));
+  });
 });

@@ -170,14 +170,13 @@ CI secrets:
 
 ## Known issues & follow-ups
 
-- **Double Chromium download.** The tool depends on the full `playwright` package because
-  `src/render/chromium.ts` shells out to its `playwright install chromium` CLI. That package
-  runs a `postinstall` that downloads browsers to Playwright's default cache, so a global
-  install fetches Chromium once at install *and* again on first `generate` (into
-  `~/.screenshot-composer/chromium`). It works but wastes ~170 MB + a wait. Future fix:
-  switch to `playwright-core` (no postinstall) and drive the one-time install another way, or
-  document `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1` for installs. Tracked as a follow-up, not a
-  blocker. (The packaged smoke test sets that env var so verification stays fast.)
+- **Chromium download (no issue — verified 2026-05-29).** An earlier draft of this spec
+  claimed a "double download" (install-time + first-run). That was based on older Playwright
+  behavior and is **not true** for the pinned `playwright` (1.60): its manifest has no
+  install/postinstall browser fetch, so installing the package downloads nothing. Chromium is
+  fetched exactly once, lazily, on first `generate` into `~/.screenshot-composer/chromium`.
+  No `playwright-core` refactor is needed. (The packaged smoke test sets
+  `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1` only to keep verification fast.)
 - **`SELF_ALIAS` published-mode bug (fixed in this work).** `src/config/load.ts` aliased the
   bare `screenshot-composer` specifier to `../index.ts`, which does not exist in `dist/`
   (the build emits `index.js`). It now picks `index.ts` in dev and `index.js` in the built

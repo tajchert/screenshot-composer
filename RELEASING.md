@@ -148,10 +148,11 @@ Once this is in place, cutting a release is just: bump `version` + `CHANGELOG.md
 
 ---
 
-## Known issue: double Chromium download
+## Chromium download
 
-The tool depends on the full `playwright` package (its CLI performs the one-time Chromium
-install). That package downloads browsers in a `postinstall`, so a global install fetches
-Chromium once at install time *and* again on first `generate`. It works but is wasteful.
-Until this is addressed (switch to `playwright-core`, or document
-`PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`), it's a known wart, not a release blocker.
+Chromium (~170 MB) is downloaded **once, lazily, on first `screenshot-composer generate`**,
+into `~/.screenshot-composer/chromium` (`src/render/chromium.ts` shells out to the bundled
+Playwright CLI). Installing the package itself downloads nothing: the pinned `playwright`
+version has no install/postinstall browser fetch (verified on 1.60). The `npm run smoke`
+test sets `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1` only to keep verification fast — that flag is
+not needed in normal use.

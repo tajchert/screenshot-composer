@@ -138,16 +138,16 @@ Changes:
 | `src/config/schema.ts` | Add `orientation` to `SlotSchema`; export `Orientation` type if useful. |
 | `src/render/constraints.ts` | `resolveDimensions(format, orientation)` returns the full §3 table; remove the throw. |
 | `src/render/target.ts` (new) | `DEFAULT_ORIENTATION`, `resolveOrientation`, `resolveRenderTarget`. |
-| `src/render/compose.ts` | Use `resolveRenderTarget(slot, format)` for `width`/`height`. (compose already holds the slot + config.) |
-| `src/render/renderSlot.ts` | Accept the resolved `RenderTarget` (or `slot` + `format`) as a parameter instead of calling `resolveDimensions(format)` itself; use it for `viewport` + `deviceScaleFactor`. |
-| `src/commands/generate.ts` | Compute `resolveRenderTarget(slot, format)` (it already iterates `slot` objects and holds `config`) and pass it to `renderSlot`. |
+| `src/render/server.ts` | Expose `config` read-only on the `RenderServer` interface (the server already closes over it) so `renderSlot` can resolve the slot's orientation. |
+| `src/render/compose.ts` | Use `resolveRenderTarget(slot, format)` for `width`/`height`. (compose already finds the slot from config.) |
+| `src/render/renderSlot.ts` | Resolve the slot via `server.config`, then use `resolveRenderTarget` for `viewport` + `deviceScaleFactor`. Signature `(server, slotId, locale, format)` is unchanged. |
 | templates | Verify clean rendering at landscape/tablet aspects; minimal tweaks only if something overflows the canvas. |
 
 **Render route stays unchanged.** The stable `/render?slot&locale&format` contract is *not*
 extended — `compose` derives orientation internally from the config + slot, so no
-`&orientation=` query param is added. The viewport size is set in `renderSlot` from a
-`RenderTarget` computed by `generate.ts` (which already has both `config` and the `slot`); the
-`RenderServer` interface is **not** widened to carry the config.
+`&orientation=` query param is added. `renderSlot`'s signature is also unchanged; it reads the
+already-owned config off `server.config` to size the viewport, which keeps all existing
+`renderSlot(...)` call sites (including tests) working without churn.
 
 ## 7. Testing (TDD)
 
@@ -175,8 +175,8 @@ Test fixtures must supply a tablet-shaped (landscape) screenshot for tablet rend
   full export size — fine, but template px constants tuned for 1080-wide phones will look
   small. Headline polish across aspect ratios is explicitly 5b (text-fit) work; 5a only
   guarantees correct, non-overflowing rendering.
-- **No new query param** keeps the render-route contract stable (CLAUDE.md). Target resolution
-  lives in `generate.ts` (which already owns `config` and the `slot`) and is passed into
-  `renderSlot`; the `RenderServer` interface is not widened.
+- **No new query param** keeps the render-route contract stable (CLAUDE.md). The only coupling
+  added is exposing the already-owned `config` read-only on `RenderServer` so `renderSlot` can
+  size the viewport; `renderSlot`'s signature stays the same and no call sites churn.
 - After 5a, update CLAUDE.md's "Current state" line and `resolveDimensions` description, and
   note in README that tablets render (with the landscape-screenshot caveat).

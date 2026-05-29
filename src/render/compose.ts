@@ -4,7 +4,7 @@ import type { Config, FormFactorT } from '../config/schema.js';
 import type { ProjectPaths } from '../paths.js';
 import { loadFrame } from '../frames/load.js';
 import { resolveTemplate } from '../templates/resolve.js';
-import { resolveDimensions } from './constraints.js';
+import { resolveRenderTarget } from './target.js';
 import { MissingInputError, RenderError } from '../errors.js';
 
 export interface SlotRef {
@@ -28,7 +28,7 @@ export async function composeSlotHtml(config: Config, paths: ProjectPaths, ref: 
   const filePath = inputFilePath(paths, ref.locale, ref.format, slot.screenshot);
   if (!existsSync(filePath)) throw new MissingInputError(filePath);
 
-  const { width, height } = resolveDimensions(ref.format);
+  const { width, height } = resolveRenderTarget(slot, ref.format);
   const { manifest, imageDataUri, maskDataUri } = await loadFrame(slot.frame.id);
   const template = await resolveTemplate(slot.template, paths);
 

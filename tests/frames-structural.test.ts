@@ -8,8 +8,8 @@ import { listFrames, loadManifest } from '../src/frames/load.js';
 const FRAMES_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../src/frames');
 
 describe('every frame on disk is structurally valid (webp)', () => {
-  it('discovers all 21 frames', async () => {
-    expect((await listFrames()).length).toBeGreaterThanOrEqual(21);
+  it('discovers all 19 frames', async () => {
+    expect((await listFrames()).length).toBeGreaterThanOrEqual(19);
   });
 
   it('each frame: manifest validates; back.webp ~= intrinsic; mask.webp present if declared', async () => {

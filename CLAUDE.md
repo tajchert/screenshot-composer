@@ -96,7 +96,7 @@ same id. The route is unchanged.
 | `src/templates/validate.ts` | `validateSlotTemplates()` — required-copy preflight before Chromium launches |
 | `src/frames/load.ts` | `listFrames()`, `loadManifest()`, `loadFrame()`, `listFrameInfos()` |
 | `src/frames/schema.ts` | Zod `FrameManifestSchema` + inferred `FrameManifest` type |
-| `src/frames/<id>/` | `manifest.json` + `back.webp` + `mask.webp` per device (21 AOSP webp frames) |
+| `src/frames/<id>/` | `manifest.json` + `back.webp` + `mask.webp` per device (19 AOSP webp frames) |
 | `src/frames/_build/import-aosp.ts` | Offline importer: copy skin webp + parse layout → manifest (`npm run frames:import`) |
 | `src/commands/*.ts` | One thin `runX()` per CLI command (init/generate/doctor/clean/templatesList/framesList) |
 

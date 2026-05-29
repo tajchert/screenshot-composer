@@ -85,4 +85,24 @@ describe('ConfigSchema', () => {
       expect(res.error.issues.some((i) => i.path.join('.') === 'defaultLocale')).toBe(true);
     }
   });
+
+  it('accepts a per-form-factor orientation override on a slot', () => {
+    const cfg = structuredClone(valid);
+    (cfg.slots[0] as any).orientation = { tablet10: 'portrait' };
+    const res = ConfigSchema.safeParse(cfg);
+    expect(res.success).toBe(true);
+    if (res.success) {
+      expect(res.data.slots[0].orientation).toEqual({ tablet10: 'portrait' });
+    }
+  });
+
+  it('rejects an invalid orientation value', () => {
+    const bad = structuredClone(valid);
+    (bad.slots[0] as any).orientation = { phone: 'sideways' };
+    const res = ConfigSchema.safeParse(bad);
+    expect(res.success).toBe(false);
+    if (!res.success) {
+      expect(res.error.issues[0].path.join('.')).toContain('slots.0.orientation.phone');
+    }
+  });
 });

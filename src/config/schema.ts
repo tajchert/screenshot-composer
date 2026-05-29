@@ -3,6 +3,9 @@ import { z } from 'zod';
 export const FormFactor = z.enum(['phone', 'tablet7', 'tablet10']);
 export type FormFactorT = z.infer<typeof FormFactor>;
 
+export const OrientationEnum = z.enum(['portrait', 'landscape']);
+export type Orientation = z.infer<typeof OrientationEnum>;
+
 const TiltSchema = z.object({
   x: z.number().min(-45).max(45),
   y: z.number().min(-45).max(45),
@@ -50,6 +53,13 @@ const SlotSchema = z.object({
   screenshot: z.string(),
   frame: FrameRefSchema,
   layout: LayoutSchema.default({}),
+  orientation: z
+    .object({
+      phone: OrientationEnum.optional(),
+      tablet7: OrientationEnum.optional(),
+      tablet10: OrientationEnum.optional(),
+    })
+    .optional(),
   copy: z.record(z.string(), z.record(z.string(), z.string())),
 });
 

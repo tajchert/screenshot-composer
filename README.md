@@ -114,9 +114,9 @@ export default defineConfig({
   slots: [                       // up to 8 per form factor
     {
       id: '01-onboarding',
-      template: 'bold-headline',          // only built-in template today
+      template: 'bold-headline',          // built-in: bold-headline, showcase, overlap
       screenshot: 'onboarding.png',       // → inputs/{locale}/{format}/onboarding.png
-      frame: { id: 'pixel-9', color: 'obsidian' },
+      frame: { id: 'pixel-9' },           // 19 built-in frames — see `frames list`
       layout: {
         tilt: { x: 4, y: -18, z: 0 },     // each axis -45..45 degrees
         translate: { x: 0, y: 40 },
@@ -166,9 +166,8 @@ The current phone export is **1080×1920**. You upload the files to Play yoursel
 
 - **Phone only.** The config schema accepts `tablet7`/`tablet10`, but rendering them is not
   implemented yet — `generate` will error. Use `['phone']`.
-- **One template** (`bold-headline`) and **one frame** (`pixel-9`, color `obsidian`).
-  `templates list` / `frames list` will show project-local entries, but rendering a
-  non-built-in template isn't wired yet.
+- **Frames are single-color.** Each device has one real AOSP colorway (no obsidian/porcelain
+  variants); a slot's `frame.color` is accepted for back-compat but ignored.
 - **Fonts:** only the system font stack; bundled/custom and non-Latin scripts are planned.
 - **No caching yet** — every `generate` re-renders.
 - **No visual editor and no Fastlane import yet.**

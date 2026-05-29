@@ -1,6 +1,6 @@
 {
   "name": "screenshot-composer",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Compose Google Play Store screenshots from Android app screenshots",
   "keywords": [
     "google-play",
@@ -28,9 +28,28 @@
   "engines": { "node": ">=20" },
   "bin": { "screenshot-composer": "dist/cli.js" },
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "NOTICE",
+    "CHANGELOG.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json && node scripts/build-finalize.mjs",
+    "prepack": "npm run typecheck && npm run build",
+    "smoke": "node scripts/smoke-pack.mjs",
     "cli": "tsx src/cli.ts",
     "frames:import": "tsx src/frames/_build/import-aosp.ts"
   },

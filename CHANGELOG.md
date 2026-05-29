@@ -6,20 +6,32 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [0.1.0]
+
+First published release. Installable from npm and Homebrew.
+
 ### Added
-- Open-source governance files for the public GitHub release: `CONTRIBUTING.md`,
-  `CODE_OF_CONDUCT.md`, `SECURITY.md`, this changelog, and `.github/` issue/PR templates
-  plus a CI workflow (typecheck + tests).
+- **Distribution (Milestone 7, partial):** a `tsc`-based build pipeline
+  (`tsconfig.build.json` + `scripts/build-finalize.mjs`) that emits `dist/` with type
+  declarations and copies the frame assets; `build` / `prepack` / `smoke` npm scripts; a
+  `files` allowlist, `publishConfig`, and `exports`/`types`. Published to npm as
+  `screenshot-composer` and installable via `brew install tajchert/tap/screenshot-composer`.
+- A packaged smoke test (`npm run smoke`) that installs the tarball into a temp project and
+  exercises the binary (`--version`, `frames list`, `init`, config load).
+- `RELEASING.md` documenting the manual release flow and the future CI automation.
+- Open-source governance files: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, this
+  changelog, and `.github/` issue/PR templates plus a CI workflow (typecheck + tests).
 - `repository`, `homepage`, `bugs`, `keywords`, and `author` metadata in `package.json`.
 
+### Fixed
+- `src/config/load.ts` aliased the bare `screenshot-composer` specifier to a `.ts` path that
+  does not exist in the built package; it now resolves the compiled `.js` entry in published
+  installs (and `.ts` in dev). This is what makes user configs load from an installed copy.
+
 ### Changed
-- README status/roadmap updated to reflect Milestones 1–4 complete (3 built-in templates,
-  19 device frames).
+- README install instructions rewritten for npm/Homebrew; status/roadmap updated.
 
-## [0.0.0]
-
-Pre-release. Milestones 1–4 complete:
-
+### Included (Milestones 1–4)
 - **M1 — Walking skeleton:** `init` + `generate` pipeline rendering one template in one
   frame to a phone PNG.
 - **M2 — Config + CLI surface:** hardened Zod schema, friendly multi-issue errors, and the
@@ -30,5 +42,5 @@ Pre-release. Milestones 1–4 complete:
 - **M4 — Device frames:** 19 real AOSP emulator device frames (Pixel 4a/5, the Pixel 6–10
   families, and Pixel Tablet), redistributed under Apache-2.0.
 
-[Unreleased]: https://github.com/tajchert/screenshot-composer/compare/v0.0.0...HEAD
-[0.0.0]: https://github.com/tajchert/screenshot-composer/releases/tag/v0.0.0
+[Unreleased]: https://github.com/tajchert/screenshot-composer/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/tajchert/screenshot-composer/releases/tag/v0.1.0

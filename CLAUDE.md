@@ -21,7 +21,8 @@ images (back.webp/mask.webp) redistributed under Apache-2.0 and composited under
 
 ## Dev workflow
 
-No build step is needed to develop or test — TypeScript runs directly via `tsx`/Vitest.
+No build step is needed to develop or test — TypeScript runs directly via `tsx`/Vitest. A
+build is only needed to package/publish (see `RELEASING.md`).
 
 ```bash
 npm install
@@ -29,14 +30,19 @@ npm test                       # vitest run (full suite; launches real Chromium 
 npm run typecheck              # tsc --noEmit  (must stay clean)
 npm run cli -- <cmd> [opts]    # run the CLI from source, e.g. npm run cli -- doctor
 npx vitest run tests/foo.test.ts   # a single test file
+npm run build                  # emit dist/ (tsc -p tsconfig.build.json + copy frame assets)
+npm run smoke                  # pack + install the tarball in a temp project and exercise the bin
 ```
 
 - ESM throughout (`"type": "module"`). Imports use **`.js` extensions that point at `.ts`
   files** (idiomatic TS-ESM; both tsx and Vitest resolve them). `tsconfig` excludes
   `tests/fixtures` from typecheck (those files import the bare package specifier, resolved at
   runtime by jiti).
-- The published `bin`/`main` point at `dist/`, which **does not exist yet** — building and
-  packaging is Milestone 7. Run from source until then.
+- The published `bin`/`main` point at `dist/`, produced by `npm run build`
+  (`tsc -p tsconfig.build.json` then `scripts/build-finalize.mjs`, which copies the frame
+  `.webp`/`manifest.json` assets next to the compiled loader and makes `dist/cli.js`
+  executable). `dist/` is gitignored; `prepack` rebuilds it on publish. Develop from source;
+  build only to package. See `RELEASING.md` for the (currently manual) release flow.
 
 ## Architecture & render pipeline
 
@@ -192,7 +198,11 @@ plan (`docs/superpowers/plans/`) → execute one milestone at a time with per-ta
 two-stage (spec + code-quality) review. When picking up the next milestone, read its plan;
 cross-milestone follow-ups raised during review are recorded as **backlog notes** at the
 bottom of the relevant plan (e.g. the M1 plan's "Milestone 2 backlog", the M2 plan's
-deferred items). Current state: **Milestones 1–4 complete**; next is **Milestone 5 (form factors, theming, tilt)**.
+deferred items). Current state: **Milestones 1–4 complete**, plus **Milestone 7 (partial):
+npm + Homebrew distribution** (build pipeline + manual release; see `RELEASING.md` and
+`docs/superpowers/specs/2026-05-29-track-b-distribution-design.md`). Remaining: **Milestone 5
+(form factors, theming, tilt)**, M6 (caching, Fastlane import), and M7's CI-automated
+releases + Docker.
 
 When you finish a feature, follow the same loop: keep the design doc/plan in
 `docs/superpowers/` authoritative, update README/CLAUDE if the user-facing surface or

@@ -151,3 +151,34 @@ workflow:
 - `brew install tajchert/tap/screenshot-composer` installs a working CLI.
 - README documents the real install paths; `RELEASING.md` documents the release flow.
 - `npm run typecheck` and the full test suite remain green.
+
+## Implementation phasing (decided 2026-05-29)
+
+The release flow is built in two phases to ship the first version sooner without standing up
+CI secrets:
+
+- **Phase 1 — manual (now).** The build pipeline (`tsconfig.build.json`,
+  `scripts/build-finalize.mjs`, the `build`/`prepack`/`smoke` scripts, `files`,
+  `publishConfig`, `exports`), version `0.1.0`, the packaged smoke test, and the docs land
+  now. The first publish is done **by hand** from a maintainer's machine
+  (`npm login` → `npm publish`). **No `NPM_TOKEN`, no `release.yml` yet.** The Homebrew
+  formula is added to `tajchert/homebrew-tap` and bumped manually using the `sha256` of the
+  published tarball.
+- **Phase 2 — automation (later).** The tag-driven `release.yml` (§3) and the Homebrew
+  auto-bump are added once `NPM_TOKEN` + `HOMEBREW_TAP_TOKEN` are configured. `RELEASING.md`
+  documents exactly how to do this so Phase 2 is a mechanical follow-up.
+
+## Known issues & follow-ups
+
+- **Double Chromium download.** The tool depends on the full `playwright` package because
+  `src/render/chromium.ts` shells out to its `playwright install chromium` CLI. That package
+  runs a `postinstall` that downloads browsers to Playwright's default cache, so a global
+  install fetches Chromium once at install *and* again on first `generate` (into
+  `~/.screenshot-composer/chromium`). It works but wastes ~170 MB + a wait. Future fix:
+  switch to `playwright-core` (no postinstall) and drive the one-time install another way, or
+  document `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1` for installs. Tracked as a follow-up, not a
+  blocker. (The packaged smoke test sets that env var so verification stays fast.)
+- **`SELF_ALIAS` published-mode bug (fixed in this work).** `src/config/load.ts` aliased the
+  bare `screenshot-composer` specifier to `../index.ts`, which does not exist in `dist/`
+  (the build emits `index.js`). It now picks `index.ts` in dev and `index.js` in the built
+  package. The packaged smoke test guards this.

@@ -11,13 +11,13 @@ your repo and rendered locally with one command.
   Fastlane `screengrab`, or by hand) — this tool composes the store images, it does not
   take the screenshots, and it does not upload them to Play.
 
-> **Status: early / pre-release (`v0.0.0`).** Milestones 1–4 are done: a working
+> **Status: early / pre-release (`v0.1.0`).** Milestones 1–4 are done and the tool is
+> published to **npm + Homebrew** (Milestone 7, partial — see [Install](#install)): a working
 > `init` → `generate` pipeline, the config + CLI surface, the template system, and real
 > AOSP device frames. Today it renders the **phone** form factor with **3 built-in
 > templates** (`bold-headline`, `showcase`, `overlap`) and **19 device frames** (Pixel 4a/5,
 > the Pixel 6–10 families, and Pixel Tablet). Tablets, full i18n fonts, caching, a visual
-> editor, and npm/Homebrew packaging are on the [roadmap](#roadmap). Until packaging lands,
-> run it from source (below).
+> editor, and a Docker image are on the [roadmap](#roadmap).
 
 ---
 
@@ -28,33 +28,33 @@ your repo and rendered locally with one command.
 - ~300 MB free disk for a one-time Chromium download (fetched automatically on first
   `generate`, cached in `~/.screenshot-composer/chromium`)
 
-## Install (from source)
+## Install
 
-Packaging to npm and Homebrew is planned (Milestone 7). For now:
-
-```bash
-git clone <this-repo>
-cd screenshot-composer
-npm install
-```
-
-Run the CLI via the `cli` script (everything after `--` is forwarded):
+**npm** (any platform, needs Node ≥ 20):
 
 ```bash
-npm run cli -- <command> [options]
-# e.g.
-npm run cli -- --version
+npm install -g screenshot-composer
+# or run without installing:
+npx screenshot-composer <command>
 ```
 
-The examples below use `screenshot-composer <command>` for readability — that's the
-published binary name that will work once packaging lands. Until then, substitute
-`npm run cli -- <command>` (or `npx tsx src/cli.ts <command>`).
+**Homebrew** (macOS/Linux):
+
+```bash
+brew install tajchert/tap/screenshot-composer
+```
+
+The first `generate` downloads Chromium once (~170 MB) into
+`~/.screenshot-composer/chromium`; nothing is downloaded until you actually render.
+
+> **Developing on the tool itself?** Clone the repo and run from source — see
+> [CONTRIBUTING.md](CONTRIBUTING.md). In that mode every command is `npm run cli -- <command>`.
 
 ## Quickstart
 
 ```bash
 # 1. Scaffold a workspace inside your Android project (creates play-screenshots/)
-npm run cli -- init
+screenshot-composer init
 
 # 2. Drop your screenshots into the inputs folder (init also creates a sample one):
 #    play-screenshots/inputs/en-US/phone/onboarding.png
@@ -62,7 +62,7 @@ npm run cli -- init
 # 3. Edit play-screenshots/screenshot-composer.config.ts to taste
 
 # 4. Render
-npm run cli -- generate
+screenshot-composer generate
 #    → play-screenshots/outputs/en-US/phone/01-onboarding.png  (1080×1920 PNG)
 ```
 
@@ -184,7 +184,7 @@ Built milestone-by-milestone; each has a spec and a plan under
 4. ✅ **Device frames** — Pixel 4a/5 + Pixel 6–10 families + Pixel Tablet (19 frames), real device images from AOSP emulator skins (Apache-2.0).
 5. ⏳ **All form factors + i18n + theming + tilt** — tablets, bundled fonts, RTL, text-fit.
 6. ⏳ **Caching + Fastlane `import`.**
-7. ⏳ **Distribution** — npm + Homebrew + Docker, golden tests, docs.
+7. 🟡 **Distribution** — npm + Homebrew shipped (manual release; see [RELEASING.md](RELEASING.md)). Docker, CI-automated releases, and golden tests still to come.
 
 ## Contributing
 

@@ -3,3 +3,6 @@ dist/
 .claude/settings.local.json
 .superpowers/
 .DS_Store
+
+# npm pack output
+*.tgz

@@ -188,7 +188,8 @@ Built milestone-by-milestone; each has a spec and a plan under
 4. ✅ **Device frames** — Pixel 4a/5 + Pixel 6–10 families + Pixel Tablet (19 frames), real device images from AOSP emulator skins (Apache-2.0).
 5. ⏳ **All form factors + i18n + theming + tilt** — tablets, bundled fonts, RTL, text-fit.
 6. ⏳ **Caching + Fastlane `import`.**
-7. 🟡 **Distribution** — npm + Homebrew shipped (manual release; see [RELEASING.md](RELEASING.md)). Docker, CI-automated releases, and golden tests still to come.
+7. ✅ **Distribution** — npm + Homebrew shipped (manual release; see [RELEASING.md](RELEASING.md)).
+8. ⏳ **Docker + CI/CD** — a deterministic Docker image (Chromium + fonts preinstalled, for reproducible CI rendering), tag-driven automated releases (npm publish + Homebrew formula auto-bump — see [RELEASING.md](RELEASING.md) "Phase 2"), and golden snapshot tests.
 
 ## Contributing
 

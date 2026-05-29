@@ -44,6 +44,10 @@ npx screenshot-composer <command>
 brew install tajchert/tap/screenshot-composer
 ```
 
+> Both channels install the same thing. npm is the canonical package; the Homebrew formula
+> is just a convenience wrapper that installs that npm package (and pulls in Node for you).
+> Use whichever you prefer.
+
 The first `generate` downloads Chromium once (~170 MB) into
 `~/.screenshot-composer/chromium`; nothing is downloaded until you actually render.
 

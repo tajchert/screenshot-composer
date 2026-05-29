@@ -1,0 +1,20 @@
+{
+  "id": "pixel-10",
+  "displayName": "Pixel 10",
+  "manufacturer": "Google",
+  "intrinsic": {
+    "width": 1198,
+    "height": 2531
+  },
+  "screen": {
+    "x": 59,
+    "y": 55,
+    "width": 1080,
+    "height": 2424,
+    "radius": 87
+  },
+  "image": "back.webp",
+  "mask": "mask.webp",
+  "source": "AOSP emulator skin pixel_10",
+  "license": "Apache-2.0"
+}

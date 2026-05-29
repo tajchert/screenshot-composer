@@ -43,22 +43,19 @@ export async function loadManifest(id: string): Promise<FrameManifest> {
 
 export async function loadFrame(
   id: string,
-  color?: string,
-): Promise<{ manifest: FrameManifest; svg: string; color: string }> {
+): Promise<{ manifest: FrameManifest; imageDataUri: string; maskDataUri?: string }> {
   const manifest = await loadManifest(id);
-  const resolved = color && manifest.files[color] ? color : manifest.colors[0];
-  if (!resolved || !manifest.files[resolved]) {
-    throw new Error(`Frame '${id}' has no usable color/svg files`);
-  }
   const dir = path.join(FRAMES_DIR, id);
-  const svg = await fs.readFile(path.join(dir, manifest.files[resolved]), 'utf8');
-  return { manifest, svg, color: resolved };
+  const toDataUri = async (file: string) =>
+    `data:image/webp;base64,${(await fs.readFile(path.join(dir, file))).toString('base64')}`;
+  const imageDataUri = await toDataUri(manifest.image);
+  const maskDataUri = manifest.mask ? await toDataUri(manifest.mask) : undefined;
+  return { manifest, imageDataUri, maskDataUri };
 }
 
 export interface FrameInfo {
   id: string;
   displayName: string;
-  colors: string[];
 }
 
 export async function listFrameInfos(): Promise<FrameInfo[]> {
@@ -66,7 +63,7 @@ export async function listFrameInfos(): Promise<FrameInfo[]> {
   const infos: FrameInfo[] = [];
   for (const id of ids) {
     const manifest = await loadManifest(id);
-    infos.push({ id, displayName: manifest.displayName, colors: manifest.colors });
+    infos.push({ id, displayName: manifest.displayName });
   }
   return infos;
 }

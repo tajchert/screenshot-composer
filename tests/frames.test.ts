@@ -7,13 +7,14 @@ describe('frames', () => {
     expect(ids).toContain('pixel-9');
   });
 
-  it('loads the pixel-9 manifest and svg, defaulting the color', async () => {
-    const { manifest, svg } = await loadFrame('pixel-9');
+  it('loads the pixel-9 manifest and webp data-URI', async () => {
+    const { manifest, imageDataUri, maskDataUri } = await loadFrame('pixel-9');
     expect(manifest.id).toBe('pixel-9');
     expect(manifest.screen.width).toBe(1080);
     expect(manifest.intrinsic).toEqual({ width: 1198, height: 2531 });
-    expect(svg).toContain('<svg');
-    expect(svg).toContain('viewBox="0 0 1198 2531"');
+    expect(imageDataUri).toMatch(/^data:image\/webp;base64,/);
+    expect(imageDataUri.length).toBeGreaterThan(10000);
+    expect(maskDataUri?.startsWith('data:image/webp;base64,')).toBe(true);
   });
 
   it('throws a clear error for an unknown frame', async () => {

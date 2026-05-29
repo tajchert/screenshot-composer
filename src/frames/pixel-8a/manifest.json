@@ -1,0 +1,20 @@
+{
+  "id": "pixel-8a",
+  "displayName": "Pixel 8a",
+  "manufacturer": "Google",
+  "intrinsic": {
+    "width": 1198,
+    "height": 2539
+  },
+  "screen": {
+    "x": 57,
+    "y": 57,
+    "width": 1080,
+    "height": 2400,
+    "radius": 86
+  },
+  "image": "back.webp",
+  "mask": "mask.webp",
+  "source": "AOSP emulator skin pixel_8a",
+  "license": "Apache-2.0"
+}

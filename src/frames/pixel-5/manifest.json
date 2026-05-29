@@ -1,0 +1,20 @@
+{
+  "id": "pixel-5",
+  "displayName": "Pixel 5",
+  "manufacturer": "Google",
+  "intrinsic": {
+    "width": 1211,
+    "height": 2474
+  },
+  "screen": {
+    "x": 60,
+    "y": 65,
+    "width": 1080,
+    "height": 2340,
+    "radius": 86
+  },
+  "image": "back.webp",
+  "mask": "mask.webp",
+  "source": "AOSP emulator skin pixel_5",
+  "license": "Apache-2.0"
+}

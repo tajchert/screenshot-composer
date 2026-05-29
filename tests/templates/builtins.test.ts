@@ -10,7 +10,7 @@ const baseProps: Omit<TemplateProps, 'copy'> = {
   frame: {
     intrinsic: { width: 800, height: 1700 },
     screen: { x: 28, y: 30, width: 744, height: 1640, radius: 44 },
-    svg: '<svg viewBox="0 0 800 1700"></svg>',
+    image: 'data:image/webp;base64,AAAA',
   },
   layout: { tilt: { x: 0, y: -8, z: 0 }, translate: { x: 0, y: 0 }, perspective: 2000 },
   theme: {
@@ -40,7 +40,7 @@ describe('showcase template', () => {
     expect(html).toContain('Everything in one tap');
     expect(html).toContain('Reorder favourites instantly.');
     expect(html).toContain('/input/en-US/phone/onboarding.png');
-    expect(html).toContain('viewBox="0 0 800 1700"');
+    expect(html).toContain('data:image/webp;base64,AAAA');
     expect(html).toContain('__READY__');
     expect(html).toContain('width: 1080px');
   });
@@ -67,7 +67,7 @@ describe('overlap template', () => {
     expect(html).toContain('SHOP');
     expect(html).toContain('Now in your pocket');
     expect(html).toContain('/input/en-US/phone/onboarding.png');
-    expect(html).toContain('viewBox="0 0 800 1700"');
+    expect(html).toContain('data:image/webp;base64,AAAA');
     expect(html).toContain('__READY__');
     expect(html).not.toMatch(/https?:\/\//);
   });

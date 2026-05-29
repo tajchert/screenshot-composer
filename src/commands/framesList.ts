@@ -4,6 +4,6 @@ import { listFrameInfos } from '../frames/load.js';
 export async function runFramesList(): Promise<void> {
   const frames = await listFrameInfos();
   for (const f of frames) {
-    console.log(`${f.id}  ${f.displayName}  [${f.colors.join(', ')}]`);
+    console.log(`${f.id}  ${f.displayName}`);
   }
 }

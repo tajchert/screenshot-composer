@@ -73,11 +73,11 @@ export default defineConfig({
       copy: { headline: { 'en-US': 'Pixel 9a' } },
     },
     {
-      id: '07-generic-android',
+      id: '07-pixel-7',
       template: 'bold-headline',
       screenshot: 'onboarding.png',
-      frame: { id: 'generic-android', color: 'graphite' },
-      copy: { headline: { 'en-US': 'Generic' } },
+      frame: { id: 'pixel-7' },
+      copy: { headline: { 'en-US': 'Pixel 7' } },
     },
   ],
 });
@@ -125,7 +125,7 @@ describe('renderSlot', () => {
     ['04-pixel-9-pro', 'pixel-9-pro'],
     ['05-pixel-9-pro-xl', 'pixel-9-pro-xl'],
     ['06-pixel-9a', 'pixel-9a'],
-    ['07-generic-android', 'generic-android'],
+    ['07-pixel-7', 'pixel-7'],
   ] as const) {
     it(`renders a valid in-constraint PNG with frame '${frameId}' (slot ${slotId})`, async () => {
       const buf = await renderSlot(server, slotId, 'en-US', 'phone');

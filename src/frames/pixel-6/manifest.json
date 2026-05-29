@@ -2,10 +2,6 @@
   "id": "pixel-6",
   "displayName": "Pixel 6",
   "manufacturer": "Google",
-  "colors": [
-    "obsidian",
-    "coral"
-  ],
   "intrinsic": {
     "width": 1209,
     "height": 2553
@@ -17,16 +13,8 @@
     "height": 2400,
     "radius": 86
   },
-  "shadow": {
-    "x": 0,
-    "y": 24,
-    "blur": 64,
-    "color": "rgba(0,0,0,0.18)"
-  },
+  "image": "back.webp",
+  "mask": "mask.webp",
   "source": "AOSP emulator skin pixel_6",
-  "license": "Apache-2.0",
-  "files": {
-    "obsidian": "obsidian.svg",
-    "coral": "coral.svg"
-  }
+  "license": "Apache-2.0"
 }

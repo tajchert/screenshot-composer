@@ -2,10 +2,6 @@
   "id": "pixel-9",
   "displayName": "Pixel 9",
   "manufacturer": "Google",
-  "colors": [
-    "obsidian",
-    "porcelain"
-  ],
   "intrinsic": {
     "width": 1198,
     "height": 2531
@@ -17,16 +13,8 @@
     "height": 2424,
     "radius": 87
   },
-  "shadow": {
-    "x": 0,
-    "y": 24,
-    "blur": 64,
-    "color": "rgba(0,0,0,0.18)"
-  },
+  "image": "back.webp",
+  "mask": "mask.webp",
   "source": "AOSP emulator skin pixel_9",
-  "license": "Apache-2.0",
-  "files": {
-    "obsidian": "obsidian.svg",
-    "porcelain": "porcelain.svg"
-  }
+  "license": "Apache-2.0"
 }

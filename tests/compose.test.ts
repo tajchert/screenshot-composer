@@ -36,6 +36,8 @@ describe('compose', () => {
     const html = await composeSlotHtml(config, p, { slotId: '01-onboarding', locale: 'en-US', format: 'phone' });
     expect(html).toContain('/input/en-US/phone/onboarding.png');
     expect(html).toContain('Order in seconds');
+    // frame back.webp + mask.webp are both composited in (data-URIs)
+    expect((html.match(/data:image\/webp;base64,/g) || []).length).toBeGreaterThanOrEqual(2);
   });
 
   it('throws MissingInputError when the screenshot is absent', async () => {

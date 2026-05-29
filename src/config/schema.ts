@@ -17,6 +17,7 @@ const LayoutSchema = z.object({
 
 const FrameRefSchema = z.object({
   id: z.string(),
+  // Accepted for back-compat with older configs but ignored — each webp frame has a single color.
   color: z.string().optional(),
 });
 

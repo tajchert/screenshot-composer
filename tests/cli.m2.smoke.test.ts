@@ -20,16 +20,7 @@ describe('CLI M2 smoke', () => {
   it('frames list prints every built-in frame', async () => {
     const res = await cli(['frames', 'list'], repoRoot);
     expect(res.exitCode).toBe(0);
-    for (const id of [
-      'pixel-9',
-      'pixel-9-pro',
-      'pixel-9-pro-xl',
-      'pixel-9a',
-      'pixel-tablet',
-      'generic-android',
-      'generic-tablet-7',
-      'generic-tablet-10',
-    ]) {
+    for (const id of ['pixel-9', 'pixel-9-pro', 'pixel-9-pro-xl', 'pixel-8', 'pixel-7', 'pixel-6', 'pixel-4', 'pixel-10', 'pixel-tablet']) {
       expect(res.stdout).toContain(id);
     }
   });

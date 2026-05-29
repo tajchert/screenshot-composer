@@ -1,0 +1,20 @@
+{
+  "id": "pixel-10-pro-xl",
+  "displayName": "Pixel 10 Pro XL",
+  "manufacturer": "Google",
+  "intrinsic": {
+    "width": 1466,
+    "height": 3101
+  },
+  "screen": {
+    "x": 60,
+    "y": 55,
+    "width": 1344,
+    "height": 2992,
+    "radius": 108
+  },
+  "image": "back.webp",
+  "mask": "mask.webp",
+  "source": "AOSP emulator skin pixel_10_pro_xl",
+  "license": "Apache-2.0"
+}

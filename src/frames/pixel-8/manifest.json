@@ -2,10 +2,6 @@
   "id": "pixel-8",
   "displayName": "Pixel 8",
   "manufacturer": "Google",
-  "colors": [
-    "obsidian",
-    "hazel"
-  ],
   "intrinsic": {
     "width": 1187,
     "height": 2513
@@ -17,16 +13,8 @@
     "height": 2400,
     "radius": 86
   },
-  "shadow": {
-    "x": 0,
-    "y": 24,
-    "blur": 64,
-    "color": "rgba(0,0,0,0.18)"
-  },
+  "image": "back.webp",
+  "mask": "mask.webp",
   "source": "AOSP emulator skin pixel_8",
-  "license": "Apache-2.0",
-  "files": {
-    "obsidian": "obsidian.svg",
-    "hazel": "hazel.svg"
-  }
+  "license": "Apache-2.0"
 }

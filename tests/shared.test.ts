@@ -12,7 +12,8 @@ import type { TemplateProps } from '../src/templates/types.js';
 const frame: TemplateProps['frame'] = {
   intrinsic: { width: 800, height: 1700 },
   screen: { x: 28, y: 30, width: 744, height: 1640, radius: 44 },
-  svg: '<svg viewBox="0 0 800 1700"></svg>',
+  image: 'data:image/webp;base64,AAAA',
+  mask: 'data:image/webp;base64,BBBB',
 };
 
 describe('shared template helpers', () => {
@@ -42,25 +43,23 @@ describe('shared template helpers', () => {
     expect(t).toContain('translate(0px, 40px)');
   });
 
-  it('emits device markup containing the screenshot and frame svg', () => {
+  it('emits device markup: screenshot img, frame image overlay, mask overlay (no inline svg)', () => {
     const m = computeDevice(frame, 1000);
     const html = deviceMarkup('/input/en-US/phone/a.png', frame, m, 'none');
-    expect(html).toContain('/input/en-US/phone/a.png');
-    expect(html).toContain('viewBox="0 0 800 1700"');
+    expect(html).toContain('/input/en-US/phone/a.png');       // screenshot
+    expect(html).toContain('data:image/webp;base64,AAAA');     // frame back.webp
+    expect(html).toContain('data:image/webp;base64,BBBB');     // mask overlay
+    expect(html).toContain('object-fit:cover');
+    expect(html).toContain('border-radius:');
+    expect(html).not.toContain('<svg');
   });
 
-  it('forces the frame svg to fill the device container, overriding its intrinsic size', () => {
-    // A frame whose intrinsic px size (800x1700) differs from the device container
-    // must still scale to the container, or the cutout drifts away from the screenshot.
-    const sized: TemplateProps['frame'] = {
-      ...frame,
-      svg: '<svg viewBox="0 0 800 1700" width="800" height="1700"></svg>',
-    };
-    const m = computeDevice(sized, 1000); // deviceWidth ~= 471, not 800
-    const html = deviceMarkup('/input/a.png', sized, m, 'none');
-    // Inline style on the <svg> overrides the width/height presentation attributes,
-    // so the viewBox maps to the (smaller) container the screenshot is sized against.
-    expect(html).toMatch(/<svg[^>]*style="[^"]*width:\s*100%[^"]*height:\s*100%/);
+  it('omits the mask overlay when the frame has no mask', () => {
+    const m = computeDevice(frame, 1000);
+    const noMask = { ...frame, mask: undefined };
+    const html = deviceMarkup('/input/a.png', noMask, m, 'none');
+    expect(html).toContain('data:image/webp;base64,AAAA');
+    expect(html).not.toContain('data:image/webp;base64,BBBB');
   });
 
   it('emits a readiness script setting __READY__', () => {

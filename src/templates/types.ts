@@ -6,7 +6,8 @@ export interface TemplateProps {
   frame: {
     intrinsic: { width: number; height: number };
     screen: { x: number; y: number; width: number; height: number; radius: number };
-    svg: string;
+    image: string;
+    mask?: string;
   };
   layout: {
     tilt: { x: number; y: number; z: number };

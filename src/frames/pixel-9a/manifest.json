@@ -2,10 +2,6 @@
   "id": "pixel-9a",
   "displayName": "Pixel 9a",
   "manufacturer": "Google",
-  "colors": [
-    "obsidian",
-    "iris"
-  ],
   "intrinsic": {
     "width": 1224,
     "height": 2570
@@ -17,16 +13,8 @@
     "height": 2424,
     "radius": 87
   },
-  "shadow": {
-    "x": 0,
-    "y": 24,
-    "blur": 64,
-    "color": "rgba(0,0,0,0.18)"
-  },
+  "image": "back.webp",
+  "mask": "mask.webp",
   "source": "AOSP emulator skin pixel_9a",
-  "license": "Apache-2.0",
-  "files": {
-    "obsidian": "obsidian.svg",
-    "iris": "iris.svg"
-  }
+  "license": "Apache-2.0"
 }

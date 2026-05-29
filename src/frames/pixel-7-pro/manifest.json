@@ -2,10 +2,6 @@
   "id": "pixel-7-pro",
   "displayName": "Pixel 7 Pro",
   "manufacturer": "Google",
-  "colors": [
-    "obsidian",
-    "hazel"
-  ],
   "intrinsic": {
     "width": 1547,
     "height": 3272
@@ -17,16 +13,8 @@
     "height": 3120,
     "radius": 115
   },
-  "shadow": {
-    "x": 0,
-    "y": 24,
-    "blur": 64,
-    "color": "rgba(0,0,0,0.18)"
-  },
+  "image": "back.webp",
+  "mask": "mask.webp",
   "source": "AOSP emulator skin pixel_7_pro",
-  "license": "Apache-2.0",
-  "files": {
-    "obsidian": "obsidian.svg",
-    "hazel": "hazel.svg"
-  }
+  "license": "Apache-2.0"
 }

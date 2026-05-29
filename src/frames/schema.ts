@@ -25,12 +25,12 @@ export const FrameManifestSchema = z
     id: z.string().min(1),
     displayName: z.string().min(1),
     manufacturer: z.string().min(1),
-    colors: z.array(z.string().min(1)).min(1),
     intrinsic: intrinsicSchema,
     screen: screenSchema,
     shadow: shadowSchema.optional(),
-    files: z.record(z.string(), z.string().min(1)),
-    // Optional in the schema for back-compat/robustness; the built-in generator always emits license (Apache-2.0 for AOSP-derived frames, MIT for generics).
+    image: z.string().min(1),
+    mask: z.string().min(1).optional(),
+    // Optional provenance; the import tool always sets license (Apache-2.0).
     source: z.string().min(1).optional(),
     license: z.string().min(1).optional(),
   })
@@ -48,15 +48,6 @@ export const FrameManifestSchema = z
         path: ['screen'],
         message: `screen rect exceeds intrinsic height (${m.screen.y}+${m.screen.height} > ${m.intrinsic.height})`,
       });
-    }
-    for (const color of m.colors) {
-      if (!m.files[color]) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['files', color],
-          message: `missing svg file mapping for color '${color}'`,
-        });
-      }
     }
   });
 

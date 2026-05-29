@@ -1,0 +1,20 @@
+{
+  "id": "pixel-7a",
+  "displayName": "Pixel 7a",
+  "manufacturer": "Google",
+  "intrinsic": {
+    "width": 1226,
+    "height": 2559
+  },
+  "screen": {
+    "x": 69,
+    "y": 69,
+    "width": 1080,
+    "height": 2400,
+    "radius": 86
+  },
+  "image": "back.webp",
+  "mask": "mask.webp",
+  "source": "AOSP emulator skin pixel_7a",
+  "license": "Apache-2.0"
+}

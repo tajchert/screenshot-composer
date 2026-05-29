@@ -2,10 +2,6 @@
   "id": "pixel-8-pro",
   "displayName": "Pixel 8 Pro",
   "manufacturer": "Google",
-  "colors": [
-    "obsidian",
-    "porcelain"
-  ],
   "intrinsic": {
     "width": 1469,
     "height": 3104
@@ -17,16 +13,8 @@
     "height": 2992,
     "radius": 108
   },
-  "shadow": {
-    "x": 0,
-    "y": 24,
-    "blur": 64,
-    "color": "rgba(0,0,0,0.18)"
-  },
+  "image": "back.webp",
+  "mask": "mask.webp",
   "source": "AOSP emulator skin pixel_8_pro",
-  "license": "Apache-2.0",
-  "files": {
-    "obsidian": "obsidian.svg",
-    "porcelain": "porcelain.svg"
-  }
+  "license": "Apache-2.0"
 }

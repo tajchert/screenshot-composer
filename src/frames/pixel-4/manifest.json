@@ -1,0 +1,20 @@
+{
+  "id": "pixel-4",
+  "displayName": "Pixel 4",
+  "manufacturer": "Google",
+  "intrinsic": {
+    "width": 1178,
+    "height": 2498
+  },
+  "screen": {
+    "x": 46,
+    "y": 146,
+    "width": 1080,
+    "height": 2280,
+    "radius": 86
+  },
+  "image": "back.webp",
+  "mask": "mask.webp",
+  "source": "AOSP emulator skin pixel_4",
+  "license": "Apache-2.0"
+}

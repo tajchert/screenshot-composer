@@ -4,8 +4,8 @@ Copyright 2026 Michal Tajchert and screenshot-composer contributors
 This product includes software/assets developed by
 The Android Open Source Project (https://source.android.com/).
 
-The built-in device frames under src/frames/ are clean-room SVG redraws.
-Their geometry (screen dimensions, corner radii, and bezel offsets) is
-derived from the Android emulator device skins, which are licensed under
-the Apache License, Version 2.0. No Android raster assets are included or
-redistributed. See LICENSE-APACHE for the full Apache-2.0 text.
+This product includes device-frame images (back.webp and mask.webp) and their
+geometry from the Android Open Source Project emulator device skins
+(https://source.android.com/), licensed under the Apache License, Version 2.0.
+Those images are redistributed unmodified under src/frames/. See LICENSE-APACHE
+for the full Apache-2.0 text.

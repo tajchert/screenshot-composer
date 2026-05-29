@@ -11,8 +11,7 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "cli": "tsx src/cli.ts",
-    "frames:build": "tsx src/frames/_build/generate.ts",
-    "frames:extract": "tsx src/frames/_build/extract-aosp.ts"
+    "frames:import": "tsx src/frames/_build/import-aosp.ts"
   },
   "dependencies": {
     "commander": "^12.1.0",

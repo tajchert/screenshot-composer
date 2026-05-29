@@ -2,31 +2,19 @@
   "id": "pixel-tablet",
   "displayName": "Pixel Tablet",
   "manufacturer": "Google",
-  "colors": [
-    "porcelain",
-    "hazel"
-  ],
   "intrinsic": {
-    "width": 1837,
-    "height": 2798
+    "width": 2798,
+    "height": 1837
   },
   "screen": {
-    "x": 117,
-    "y": 119,
-    "width": 1600,
-    "height": 2560,
-    "radius": 48
+    "x": 119,
+    "y": 117,
+    "width": 2560,
+    "height": 1600,
+    "radius": 205
   },
-  "shadow": {
-    "x": 0,
-    "y": 24,
-    "blur": 64,
-    "color": "rgba(0,0,0,0.18)"
-  },
-  "source": "AOSP emulator skin pixel_tablet (portrait transpose)",
-  "license": "Apache-2.0",
-  "files": {
-    "porcelain": "porcelain.svg",
-    "hazel": "hazel.svg"
-  }
+  "image": "back.webp",
+  "mask": "mask.webp",
+  "source": "AOSP emulator skin pixel_tablet",
+  "license": "Apache-2.0"
 }

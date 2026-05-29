@@ -2,10 +2,6 @@
   "id": "pixel-9-pro-xl",
   "displayName": "Pixel 9 Pro XL",
   "manufacturer": "Google",
-  "colors": [
-    "obsidian",
-    "porcelain"
-  ],
   "intrinsic": {
     "width": 1466,
     "height": 3101
@@ -17,16 +13,8 @@
     "height": 2992,
     "radius": 108
   },
-  "shadow": {
-    "x": 0,
-    "y": 24,
-    "blur": 64,
-    "color": "rgba(0,0,0,0.18)"
-  },
+  "image": "back.webp",
+  "mask": "mask.webp",
   "source": "AOSP emulator skin pixel_9_pro_xl",
-  "license": "Apache-2.0",
-  "files": {
-    "obsidian": "obsidian.svg",
-    "porcelain": "porcelain.svg"
-  }
+  "license": "Apache-2.0"
 }

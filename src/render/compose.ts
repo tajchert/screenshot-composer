@@ -29,7 +29,7 @@ export async function composeSlotHtml(config: Config, paths: ProjectPaths, ref: 
   if (!existsSync(filePath)) throw new MissingInputError(filePath);
 
   const { width, height } = resolveDimensions(ref.format);
-  const { manifest, svg } = await loadFrame(slot.frame.id, slot.frame.color);
+  const { manifest, imageDataUri, maskDataUri } = await loadFrame(slot.frame.id);
   const template = await resolveTemplate(slot.template, paths);
 
   // Resolve every declared copy key for this locale, falling back to defaultLocale.
@@ -43,7 +43,7 @@ export async function composeSlotHtml(config: Config, paths: ProjectPaths, ref: 
     height,
     copy,
     screenshotUrl: inputUrl(ref.locale, ref.format, slot.screenshot),
-    frame: { intrinsic: manifest.intrinsic, screen: manifest.screen, svg },
+    frame: { intrinsic: manifest.intrinsic, screen: manifest.screen, image: imageDataUri, mask: maskDataUri },
     layout: slot.layout,
     theme: config.theme,
   });

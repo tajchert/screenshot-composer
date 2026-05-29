@@ -15,9 +15,9 @@ in one Node process; there is no server, database, or network call at render tim
 one-time Chromium download.
 
 **Hard scope boundaries** (do not cross without a design change): local-only, no Play upload,
-we *consume* screenshots and never *capture* them, frames are clean-room SVG redrawn assets
-(the project is MIT; Google-device frame geometry is derived from AOSP emulator skins under
-Apache-2.0 — see NOTICE).
+we *consume* screenshots and never *capture* them, device frames are the AOSP emulator device
+images (back.webp/mask.webp) redistributed under Apache-2.0 and composited under the screenshot
+(project is MIT; see NOTICE/LICENSE-APACHE).
 
 ## Dev workflow
 
@@ -96,9 +96,8 @@ same id. The route is unchanged.
 | `src/templates/validate.ts` | `validateSlotTemplates()` — required-copy preflight before Chromium launches |
 | `src/frames/load.ts` | `listFrames()`, `loadManifest()`, `loadFrame()`, `listFrameInfos()` |
 | `src/frames/schema.ts` | Zod `FrameManifestSchema` + inferred `FrameManifest` type |
-| `src/frames/<id>/` | `manifest.json` + one clean-room `<color>.svg` per colorway (14 built-in frames) |
-| `src/frames/_build/svg.ts` | Pure SVG builders (`buildPhoneSvg`, `buildTabletSvg`) — offline tooling |
-| `src/frames/_build/generate.ts` | Frame generator: writes every manifest + SVG from a typed spec; run via `npm run frames:build` |
+| `src/frames/<id>/` | `manifest.json` + `back.webp` + `mask.webp` per device (21 AOSP webp frames) |
+| `src/frames/_build/import-aosp.ts` | Offline importer: copy skin webp + parse layout → manifest (`npm run frames:import`) |
 | `src/commands/*.ts` | One thin `runX()` per CLI command (init/generate/doctor/clean/templatesList/framesList) |
 
 ## Key decisions & gotchas (read before editing render code)
@@ -135,26 +134,16 @@ unit tests but would have broken the real CLI:
 
 ## How to add a device frame (works today)
 
-Every built-in frame is produced by the generator at `src/frames/_build/generate.ts` from a
-single typed spec list, so adding a frame is a data-only change.
-
-1. Open `src/frames/_build/generate.ts` and add a `PhoneSpec` or `TabletSpec` entry to the
-   `FRAMES` array. Provide `id`, `displayName`, `manufacturer`, `intrinsic {width,height}`,
-   `screen {x,y,width,height,radius}` (in intrinsic coordinates), optional `shadow`, and a
-   `colorways` map of color name → `PhoneColorway` (body gradient, bezelInner, button, camera)
-   or `TabletColorway` (no button). Reuse existing colorway constants where they fit.
-2. Run `npm run frames:build`. The script writes `src/frames/<id>/manifest.json` and one
-   `<color>.svg` per colorway using `buildPhoneSvg` / `buildTabletSvg`. SVGs are clean-room:
-   `viewBox` matches `intrinsic`, screen is masked out for the screenshot to show through, no
-   `<image>` rasters, no remote refs.
-3. `listFrames()` auto-discovers any directory containing a `manifest.json`, and
-   `tests/frames-structural.test.ts` validates every frame on disk — no per-frame test code
-   needed. Reference the frame in a config slot as `frame: { id: '<id>', color: '<color>' }`.
-
-Real-device geometry can be extracted from the local Android SDK skins with
-`npm run frames:extract -- <skin>` (offline dev tool; its output is committed into the FRAMES
-spec). Each manifest may carry `source`/`license` provenance fields (Apache-2.0 for
-AOSP-derived frames, MIT for generics).
+A frame is added by importing its AOSP skin: `npm run frames:import -- <skin>` (needs the
+local Android SDK) copies `back.webp`/`mask.webp` and writes the manifest from the skin's
+`layout` file. The committed `back.webp`, `mask.webp`, and `manifest.json` are the source of
+truth. The renderer composites the screenshot under `back.webp` (transparent screen hole) and
+overlays `mask.webp` to clip the screen corners to the device's exact display shape (the mask
+is transparent over the display area and opaque-black only in the corner wedges, which
+`border-radius` alone cannot reproduce). `listFrames()` auto-discovers any directory with a
+`manifest.json`; `tests/frames-structural.test.ts` validates every frame on disk — no
+per-frame test code needed. Reference the frame in a config slot as
+`frame: { id: '<id>' }`.
 
 Tablet frames are catalogued but `resolveDimensions` is phone-only until Milestone 5; until
 then they ship as validated assets that `frames list` shows but `generate` cannot render.

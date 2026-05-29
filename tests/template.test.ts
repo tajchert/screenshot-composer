@@ -10,7 +10,7 @@ const props: TemplateProps = {
   frame: {
     intrinsic: { width: 800, height: 1700 },
     screen: { x: 28, y: 30, width: 744, height: 1640, radius: 44 },
-    svg: '<svg viewBox="0 0 800 1700"></svg>',
+    image: 'data:image/webp;base64,AAAA',
   },
   layout: { tilt: { x: 4, y: -18, z: 0 }, translate: { x: 0, y: 40 }, perspective: 2000 },
   theme: {
@@ -27,12 +27,12 @@ describe('bold-headline template', () => {
     expect(meta.copyFields.find((f) => f.key === 'headline')?.required).toBe(true);
   });
 
-  it('embeds the headline, screenshot, frame svg and readiness signal', () => {
+  it('embeds the headline, screenshot, frame image and readiness signal', () => {
     const html = render(props);
     expect(html).toContain('<!DOCTYPE html>');
     expect(html).toContain('Order in seconds');
     expect(html).toContain('/input/en-US/phone/onboarding.png');
-    expect(html).toContain('viewBox="0 0 800 1700"');
+    expect(html).toContain('data:image/webp;base64,AAAA');
     expect(html).toContain('__READY__');
     expect(html).toContain('width: 1080px');
     expect(html).toContain('height: 1920px');

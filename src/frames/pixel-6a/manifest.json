@@ -1,0 +1,20 @@
+{
+  "id": "pixel-6a",
+  "displayName": "Pixel 6a",
+  "manufacturer": "Google",
+  "intrinsic": {
+    "width": 1207,
+    "height": 2555
+  },
+  "screen": {
+    "x": 57,
+    "y": 69,
+    "width": 1080,
+    "height": 2400,
+    "radius": 86
+  },
+  "image": "back.webp",
+  "mask": "mask.webp",
+  "source": "AOSP emulator skin pixel_6a",
+  "license": "Apache-2.0"
+}

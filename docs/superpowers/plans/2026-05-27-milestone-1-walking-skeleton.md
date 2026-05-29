@@ -14,7 +14,7 @@
 
 ## File Structure
 
-Created in this milestone (all paths relative to repo root `/Users/mtajchert/coding/priv/playscreens`):
+Created in this milestone (all paths relative to the repo root):
 
 | File | Responsibility |
 |---|---|

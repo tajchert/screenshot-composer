@@ -11,12 +11,13 @@ your repo and rendered locally with one command.
   Fastlane `screengrab`, or by hand) — this tool composes the store images, it does not
   take the screenshots, and it does not upload them to Play.
 
-> **Status: early / pre-release (`v0.0.0`).** Milestones 1–2 are done: a working
-> `init` → `generate` pipeline plus the config + CLI surface. Today it renders the
-> **phone** form factor using the built-in **`bold-headline`** template and the **Pixel 9**
-> frame. Tablets, more templates/frames, full i18n fonts, caching, a visual editor, and
-> npm/Homebrew packaging are on the [roadmap](#roadmap). Until packaging lands, run it
-> from source (below).
+> **Status: early / pre-release (`v0.0.0`).** Milestones 1–4 are done: a working
+> `init` → `generate` pipeline, the config + CLI surface, the template system, and real
+> AOSP device frames. Today it renders the **phone** form factor with **3 built-in
+> templates** (`bold-headline`, `showcase`, `overlap`) and **19 device frames** (Pixel 4a/5,
+> the Pixel 6–10 families, and Pixel Tablet). Tablets, full i18n fonts, caching, a visual
+> editor, and npm/Homebrew packaging are on the [roadmap](#roadmap). Until packaging lands,
+> run it from source (below).
 
 ---
 
@@ -179,8 +180,8 @@ Built milestone-by-milestone; each has a spec and a plan under
 
 1. ✅ **Walking skeleton** — `init` + `generate`, one template, one frame, phone PNG.
 2. ✅ **Config + CLI surface** — hardened schema, friendly errors, `doctor`/`clean`/`templates list`/`frames list`/`--version`.
-3. ⏳ **Template system** — `TemplateProps` contract, React/Tailwind templates via Vite SSR, project-local template resolver.
-4. ⏳ **Device frames** — Pixel 4a/5 + Pixel 6–10 families + Pixel Tablet (19 frames), real device images from AOSP emulator skins (Apache-2.0).
+3. ✅ **Template system** — `TemplateModule` contract (typed HTML-string modules), shared render helpers, project-local template resolver.
+4. ✅ **Device frames** — Pixel 4a/5 + Pixel 6–10 families + Pixel Tablet (19 frames), real device images from AOSP emulator skins (Apache-2.0).
 5. ⏳ **All form factors + i18n + theming + tilt** — tablets, bundled fonts, RTL, text-fit.
 6. ⏳ **Caching + Fastlane `import`.**
 7. ⏳ **Distribution** — npm + Homebrew + Docker, golden tests, docs.

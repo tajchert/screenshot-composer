@@ -9,6 +9,7 @@ import { MissingInputError } from '../errors.js';
 export interface RenderServer {
   url: string;
   port: number;
+  config: Config;
   close(): Promise<void>;
 }
 
@@ -66,6 +67,7 @@ export async function startRenderServer(opts: { config: Config; paths: ProjectPa
   return {
     url: `http://127.0.0.1:${port}`,
     port,
+    config,
     close: () => new Promise<void>((resolve, reject) => server.close((e) => (e ? reject(e) : resolve()))),
   };
 }

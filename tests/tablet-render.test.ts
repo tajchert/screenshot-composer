@@ -65,6 +65,7 @@ describe('tablet rendering', () => {
     const meta = await sharp(buf).metadata();
     expect(meta.width).toBe(3840);
     expect(meta.height).toBe(2160);
+    expect(meta.format).toBe('png');
     expect(buf.byteLength).toBeLessThanOrEqual(8 * 1024 * 1024);
   }, 180_000);
 
@@ -79,6 +80,7 @@ describe('tablet rendering', () => {
     const meta = await sharp(buf).metadata();
     expect(meta.width).toBe(1200);
     expect(meta.height).toBe(1920);
+    expect(meta.format).toBe('png');
     expect(buf.byteLength).toBeLessThanOrEqual(8 * 1024 * 1024);
   }, 180_000);
 });

@@ -7,9 +7,9 @@ import { composeSlotHtml } from './compose.js';
 import { MissingInputError } from '../errors.js';
 
 export interface RenderServer {
-  url: string;
-  port: number;
-  config: Config;
+  readonly url: string;
+  readonly port: number;
+  readonly config: Config;
   close(): Promise<void>;
 }
 

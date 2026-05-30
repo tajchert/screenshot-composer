@@ -55,6 +55,7 @@ describe('runGenerate (multi form factor)', () => {
     expect(pMeta.width).toBe(1080);
     expect(pMeta.height).toBe(1920);
 
+    // tablet10 default orientation is landscape: 1920×1080 logical viewport × deviceScaleFactor 2 = 3840×2160.
     const tablet = path.join(p.outputs, 'en-US', 'tablet10', '01-onboarding.png');
     const tMeta = await sharp(tablet).metadata();
     expect(tMeta.width).toBe(3840);

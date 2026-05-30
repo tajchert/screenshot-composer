@@ -2,6 +2,9 @@ import { describe, it, expect } from 'vitest';
 import path from 'node:path';
 import os from 'node:os';
 import { promises as fs } from 'node:fs';
+import { projectPaths } from '../src/paths.js';
+import type { Config } from '../src/config/schema.js';
+import { MissingInputError } from '../src/errors.js';
 import {
   loadCacheIndex,
   saveCacheIndex,
@@ -10,6 +13,7 @@ import {
   computeCacheKey,
   identityKey,
   outputFilePath,
+  cacheKeyForSlot,
   type CacheIndex,
   type CacheKeyInput,
 } from '../src/render/cache.js';
@@ -109,6 +113,79 @@ describe('path helpers', () => {
   it('builds the output file path', () => {
     expect(outputFilePath('/out', 'en-US', 'phone', '01', 'png')).toBe(
       path.join('/out', 'en-US', 'phone', '01.png'),
+    );
+  });
+});
+
+function fixtureConfig(): Config {
+  return {
+    locales: ['en-US'],
+    defaultLocale: 'en-US',
+    formFactors: ['phone'],
+    theme: { palette: { fg: '#000', accent: '#111', muted: '#222' } },
+    slots: [
+      {
+        id: '01',
+        template: 'bold-headline',
+        screenshot: 'shot.png',
+        frame: { id: 'pixel-9' },
+        layout: {},
+        copy: { headline: { 'en-US': 'Hi' } },
+      },
+    ],
+  } as unknown as Config;
+}
+
+async function slotFixture(): Promise<{ root: string; config: Config }> {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'sc-keyslot-'));
+  const p = projectPaths(root);
+  await fs.mkdir(path.join(p.inputs, 'en-US', 'phone'), { recursive: true });
+  await fs.writeFile(path.join(p.inputs, 'en-US', 'phone', 'shot.png'), 'PNGBYTES-1');
+  return { root, config: fixtureConfig() };
+}
+
+describe('cacheKeyForSlot', () => {
+  const version = { tool: '0.1.0', chromium: '120' };
+
+  it('is stable across calls and changes when the screenshot bytes change', async () => {
+    const { root, config } = await slotFixture();
+    const p = projectPaths(root);
+    const slot = config.slots[0];
+    const k1 = await cacheKeyForSlot(config, p, slot, 'en-US', 'phone', version);
+    expect(await cacheKeyForSlot(config, p, slot, 'en-US', 'phone', version)).toBe(k1);
+    await fs.writeFile(path.join(p.inputs, 'en-US', 'phone', 'shot.png'), 'PNGBYTES-2');
+    expect(await cacheKeyForSlot(config, p, slot, 'en-US', 'phone', version)).not.toBe(k1);
+  });
+
+  it('changes when a project-local template source appears or changes', async () => {
+    const { root, config } = await slotFixture();
+    const p = projectPaths(root);
+    const slot = config.slots[0];
+    const base = await cacheKeyForSlot(config, p, slot, 'en-US', 'phone', version);
+    const tplDir = path.join(p.templates, 'bold-headline');
+    await fs.mkdir(tplDir, { recursive: true });
+    await fs.writeFile(path.join(tplDir, 'index.ts'), 'export default {}; // v1');
+    const withTpl = await cacheKeyForSlot(config, p, slot, 'en-US', 'phone', version);
+    expect(withTpl).not.toBe(base);
+    await fs.writeFile(path.join(tplDir, 'index.ts'), 'export default {}; // v2');
+    expect(await cacheKeyForSlot(config, p, slot, 'en-US', 'phone', version)).not.toBe(withTpl);
+  });
+
+  it('changes when the version changes', async () => {
+    const { root, config } = await slotFixture();
+    const p = projectPaths(root);
+    const slot = config.slots[0];
+    const k1 = await cacheKeyForSlot(config, p, slot, 'en-US', 'phone', version);
+    const k2 = await cacheKeyForSlot(config, p, slot, 'en-US', 'phone', { tool: '0.2.0', chromium: '120' });
+    expect(k2).not.toBe(k1);
+  });
+
+  it('throws MissingInputError when the screenshot is absent', async () => {
+    const { root, config } = await slotFixture();
+    const p = projectPaths(root);
+    const slot = { ...config.slots[0], screenshot: 'nope.png' };
+    await expect(cacheKeyForSlot(config, p, slot, 'en-US', 'phone', version)).rejects.toBeInstanceOf(
+      MissingInputError,
     );
   });
 });

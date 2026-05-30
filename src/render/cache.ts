@@ -1,8 +1,14 @@
 import { promises as fs } from 'node:fs';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
-import type { FormFactorT } from '../config/schema.js';
+import type { Config, FormFactorT, Slot } from '../config/schema.js';
 import type { Dimensions } from './constraints.js';
+import type { ProjectPaths } from '../paths.js';
+import { resolveDimensions } from './constraints.js';
+import { resolveCopy } from './compose.js';
+import { versionInfo } from '../version.js';
+import { MissingInputError } from '../errors.js';
 
 /** Bump to invalidate every cache key (key-algorithm change). */
 export const CACHE_FORMAT_VERSION = 1;
@@ -95,4 +101,44 @@ export function outputFilePath(
   ext: string,
 ): string {
   return path.join(outputsDir, locale, format, `${slotId}.${ext}`);
+}
+
+async function hashFile(filePath: string): Promise<string> {
+  const buf = await fs.readFile(filePath);
+  return createHash('sha256').update(buf).digest('hex');
+}
+
+export async function cacheKeyForSlot(
+  config: Config,
+  paths: ProjectPaths,
+  slot: Slot,
+  locale: string,
+  format: FormFactorT,
+  version: { tool: string; chromium: string } = versionInfo(),
+): Promise<string> {
+  const dimensions = resolveDimensions(format);
+
+  const screenshotPath = path.join(paths.inputs, locale, format, slot.screenshot);
+  if (!existsSync(screenshotPath)) throw new MissingInputError(screenshotPath);
+  const screenshotHash = await hashFile(screenshotPath);
+
+  const localTemplate = path.join(paths.templates, slot.template, 'index.ts');
+  const templateSourceHash = existsSync(localTemplate) ? await hashFile(localTemplate) : null;
+
+  return computeCacheKey({
+    cacheFormatVersion: CACHE_FORMAT_VERSION,
+    tool: version.tool,
+    chromium: version.chromium,
+    locale,
+    format,
+    dimensions,
+    slotId: slot.id,
+    frameId: slot.frame.id,
+    templateId: slot.template,
+    layout: slot.layout,
+    copy: resolveCopy(slot, locale, config.defaultLocale),
+    theme: config.theme,
+    screenshotHash,
+    templateSourceHash,
+  });
 }

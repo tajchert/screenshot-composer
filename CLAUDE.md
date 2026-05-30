@@ -93,7 +93,8 @@ same id. The route is unchanged.
 | `src/render/chromium.ts` | `ensureChromium()`, `isChromiumPresent()` |
 | `src/render/browser.ts` | Playwright browser singleton (**dynamic** import — see gotchas) |
 | `src/render/renderSlot.ts` | Navigate + readiness wait + screenshot + constraints |
-| `src/render/constraints.ts` | `resolveDimensions()` (phone only today), `enforceConstraints()`, `extFor()` |
+| `src/render/constraints.ts` | `resolveDimensions(format, orientation)` (all form factors), `enforceConstraints()`, `extFor()` |
+| `src/render/target.ts` | `resolveRenderTarget(slot, format)` → logical viewport + DSF + orientation (defaults + per-slot overrides) |
 | `src/templates/types.ts` | `TemplateProps` / `TemplateMeta` / `TemplateModule` contract |
 | `src/templates/shared.ts` | `escapeHtml`, `backgroundCss`, device metrics + markup, readiness script |
 | `src/templates/<id>/index.ts` | A built-in template (`bold-headline`, `showcase`, `overlap`): default-exports `{ meta, render }` |
@@ -158,8 +159,10 @@ omit `corner_radius` from their `layout`, so the importer measures it off `back.
 (`frames/_build/frame-measure.ts`) instead of the old `0.08 * width` guess that caused exactly
 that bug. `tests/frames-geometry.test.ts` guards every frame's radius against its artwork.
 
-Tablet frames are catalogued but `resolveDimensions` is phone-only until Milestone 5; until
-then they ship as validated assets that `frames list` shows but `generate` cannot render.
+Tablet frames render as of Milestone 5a. The frame composites in its native orientation (the
+landscape `pixel-tablet` stays landscape); a slot's `orientation` map only sets the output
+canvas, so a tablet slot's screenshot must match the frame's screen aspect (a landscape
+screenshot for the landscape tablet frame), placed under `inputs/{locale}/{tablet7|tablet10}/`.
 
 ## How to add a template (works today)
 
@@ -198,10 +201,11 @@ plan (`docs/superpowers/plans/`) → execute one milestone at a time with per-ta
 two-stage (spec + code-quality) review. When picking up the next milestone, read its plan;
 cross-milestone follow-ups raised during review are recorded as **backlog notes** at the
 bottom of the relevant plan (e.g. the M1 plan's "Milestone 2 backlog", the M2 plan's
-deferred items). Current state: **Milestones 1–4 complete**, plus **Milestone 7 (partial):
-npm + Homebrew distribution** (build pipeline + manual release; see `RELEASING.md` and
-`docs/superpowers/specs/2026-05-29-track-b-distribution-design.md`). Remaining: **Milestone 5
-(form factors, theming, tilt)**, M6 (caching, Fastlane import), and M7's CI-automated
+deferred items). Current state: **Milestones 1–4 complete**, **Milestone 5a complete** (all
+form factors + tablet frames + per-slot orientation), plus **Milestone 7 (partial): npm +
+Homebrew distribution** (build pipeline + manual release; see `RELEASING.md` and
+`docs/superpowers/specs/2026-05-29-track-b-distribution-design.md`). Remaining: **Milestone 5b
+(bundled fonts, RTL, text-fit)**, M6 (caching, Fastlane import), and M7's CI-automated
 releases + Docker.
 
 When you finish a feature, follow the same loop: keep the design doc/plan in

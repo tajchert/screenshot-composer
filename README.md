@@ -14,9 +14,9 @@ your repo and rendered locally with one command.
 > **Status: early / pre-release (`v0.1.0`).** Milestones 1–4 are done and the tool is
 > published to **npm + Homebrew** (Milestone 7, partial — see [Install](#install)): a working
 > `init` → `generate` pipeline, the config + CLI surface, the template system, and real
-> AOSP device frames. Today it renders the **phone** form factor with **3 built-in
-> templates** (`bold-headline`, `showcase`, `overlap`) and **19 device frames** (Pixel 4a/5,
-> the Pixel 6–10 families, and Pixel Tablet). Tablets, full i18n fonts, caching, a visual
+> AOSP device frames. Today it renders **all three form factors** (phone, 7" and 10" tablet)
+> with **3 built-in templates** (`bold-headline`, `showcase`, `overlap`) and **19 device
+> frames** (Pixel 4a/5, the Pixel 6–10 families, and Pixel Tablet). Full i18n fonts, caching, a visual
 > editor, and a Docker image are on the [roadmap](#roadmap).
 
 ---
@@ -104,7 +104,7 @@ import { defineConfig } from 'screenshot-composer';
 export default defineConfig({
   locales: ['en-US'],            // BCP-47 locales to render
   defaultLocale: 'en-US',        // must be one of `locales`
-  formFactors: ['phone'],        // only 'phone' is renderable today
+  formFactors: ['phone', 'tablet10'],  // 'phone' | 'tablet7' | 'tablet10'
 
   theme: {
     fontFamily: 'system-ui',     // custom/bundled fonts: roadmap (M5)
@@ -165,12 +165,15 @@ Invalid config: .../screenshot-composer.config.ts
 
 Outputs are PNG (auto-converted to progressive JPEG only if a PNG would exceed 8 MB).
 Google Play accepts PNG/JPEG ≤ 8 MB, 16:9 or 9:16, up to 8 screenshots per form factor.
-The current phone export is **1080×1920**. You upload the files to Play yourself.
+Exports: phone 1080×1920, 7" tablet 1920×1200, 10" tablet 3840×2160 (defaults; tablets
+default to landscape). Set a slot's `orientation` map to override per form factor, e.g.
+`orientation: { tablet10: 'portrait' }`. You upload the files to Play yourself.
 
 ## Current limitations (see roadmap)
 
-- **Phone only.** The config schema accepts `tablet7`/`tablet10`, but rendering them is not
-  implemented yet — `generate` will error. Use `['phone']`.
+- **Tablet screenshots must be landscape.** The `pixel-tablet` frame is landscape-native, so
+  provide landscape-shaped screenshots under `inputs/{locale}/{tablet7,tablet10}/`. A
+  portrait-native tablet frame is a future asset.
 - **Frames are single-color.** Each device has one real AOSP colorway (no obsidian/porcelain
   variants); a slot's `frame.color` is accepted for back-compat but ignored.
 - **Fonts:** only the system font stack; bundled/custom and non-Latin scripts are planned.
@@ -186,7 +189,7 @@ Built milestone-by-milestone; each has a spec and a plan under
 2. ✅ **Config + CLI surface** — hardened schema, friendly errors, `doctor`/`clean`/`templates list`/`frames list`/`--version`.
 3. ✅ **Template system** — `TemplateModule` contract (typed HTML-string modules), shared render helpers, project-local template resolver.
 4. ✅ **Device frames** — Pixel 4a/5 + Pixel 6–10 families + Pixel Tablet (19 frames), real device images from AOSP emulator skins (Apache-2.0).
-5. ⏳ **All form factors + i18n + theming + tilt** — tablets, bundled fonts, RTL, text-fit.
+5. 🚧 **Form factors + i18n + theming + tilt** — ✅ 5a: tablets + per-slot orientation; ⏳ 5b: bundled fonts, RTL, text-fit.
 6. ⏳ **Caching + Fastlane `import`.**
 7. 🟡 **Distribution** — npm + Homebrew shipped (manual release; see [RELEASING.md](RELEASING.md)). Docker, CI-automated releases, and golden tests still to come.
 

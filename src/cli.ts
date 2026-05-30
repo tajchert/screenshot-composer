@@ -29,12 +29,14 @@ program
   .option('--locale <locale>', 'render only this locale')
   .option('--format <format>', 'render only this form factor')
   .option('--slot <slotId>', 'render only this slot')
-  .action(async (opts: { locale?: string; format?: string; slot?: string }) => {
+  .option('--force', 'ignore the cache and re-render every slot')
+  .action(async (opts: { locale?: string; format?: string; slot?: string; force?: boolean }) => {
     await guard(() =>
       runGenerate(process.cwd(), {
         locale: opts.locale,
         format: opts.format as FormFactorT | undefined,
         slot: opts.slot,
+        force: opts.force,
       }),
     );
   });

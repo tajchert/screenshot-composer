@@ -31,4 +31,22 @@ describe('CLI smoke', () => {
     const gen = await cli(['generate'], root);
     expect(gen.exitCode).toBe(1);
   });
+
+  it('caches on re-run and accepts --force', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'sc-cli-cache-'));
+    expect((await cli(['init'], root)).exitCode).toBe(0);
+
+    const first = await cli(['generate'], root);
+    expect(first.exitCode).toBe(0);
+    expect(first.stderr).toContain('Rendered');
+
+    const second = await cli(['generate'], root);
+    expect(second.exitCode).toBe(0);
+    expect(second.stderr).toContain('cached');
+
+    const forced = await cli(['generate', '--force'], root);
+    expect(forced.exitCode).toBe(0);
+    // --force must bypass the cache: nothing should be served as cached.
+    expect(forced.stderr).toContain('cached 0');
+  }, 180_000);
 });

@@ -85,7 +85,7 @@ play-screenshots/
 │       └── phone/
 │           └── onboarding.png
 ├── outputs/                         # generated images (gitignored)
-├── templates/                       # project-local templates (commit; see roadmap)
+├── templates/                       # project-local templates (commit)
 ├── assets/                          # logos, backgrounds (commit)
 └── .cache/                          # gitignored
 ```
@@ -107,7 +107,7 @@ export default defineConfig({
   formFactors: ['phone', 'tablet10'],  // 'phone' | 'tablet7' | 'tablet10'
 
   theme: {
-    fontFamily: 'system-ui',     // custom/bundled fonts: roadmap (M5)
+    fontFamily: 'system-ui',     // custom/bundled fonts: roadmap (M5b)
     palette: { fg: '#0F172A', accent: '#6366F1', muted: '#94A3B8' },
     background: {                 // 'gradient' (≥2 stops) or 'solid' (color)
       type: 'gradient',

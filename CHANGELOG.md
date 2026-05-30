@@ -6,6 +6,21 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+### Added
+- **Form factors (Milestone 5a):** `generate` renders all three form factors — phone
+  (1080×1920), 7" tablet (1920×1200), and 10" tablet (3840×2160, via `deviceScaleFactor`).
+  Slots gain a per-form-factor `orientation` map (`{ phone?, tablet7?, tablet10? }`);
+  tablets default to landscape. `resolveDimensions(format, orientation)` drives the export
+  size.
+- **Render caching (Milestone 6, partial):** `generate` skips any slot whose inputs are all
+  unchanged — config, copy, screenshot bytes, template, frame, theme, and tool/Chromium
+  versions — and whose output file still exists, printing `↳ cached <id>` and a
+  `Rendered N, cached M` summary. Cache index at `play-screenshots/.cache/index.json`.
+- **`generate --force`** to bypass the cache and re-render everything.
+
+### Changed
+- `clean --cache` now also clears a populated cache index.
+
 ## [0.1.0]
 
 First published release. Installable from npm and Homebrew.

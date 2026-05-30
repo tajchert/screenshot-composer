@@ -16,8 +16,8 @@ your repo and rendered locally with one command.
 > `init` → `generate` pipeline, the config + CLI surface, the template system, and real
 > AOSP device frames. Today it renders the **phone** form factor with **3 built-in
 > templates** (`bold-headline`, `showcase`, `overlap`) and **19 device frames** (Pixel 4a/5,
-> the Pixel 6–10 families, and Pixel Tablet). Tablets, full i18n fonts, caching, a visual
-> editor, and a Docker image are on the [roadmap](#roadmap).
+> the Pixel 6–10 families, and Pixel Tablet). Tablets, full i18n fonts, a visual editor,
+> and a Docker image are on the [roadmap](#roadmap).
 
 ---
 
@@ -151,6 +151,7 @@ Invalid config: .../screenshot-composer.config.ts
 | `init` | Scaffold `play-screenshots/` with a sample config + sample screenshot |
 | `generate` | Render every slot × locale × form-factor to `outputs/` |
 | `generate --locale <l> --format <f> --slot <id>` | Render a filtered subset |
+| `generate --force` | Re-render everything, ignoring the cache |
 | `doctor` | Check Node version, Chromium install, and config validity |
 | `clean` | Remove the downloaded Chromium and the project `.cache` |
 | `clean --cache` | Remove only the project `.cache` (keep Chromium) |
@@ -160,6 +161,18 @@ Invalid config: .../screenshot-composer.config.ts
 
 **Exit codes:** `0` ok · `1` config error · `2` missing input · `3` render failure ·
 `4` output exceeds Play's 8 MB limit. Handy for CI scripts.
+
+### Caching
+
+`generate` caches each rendered output and only re-renders what has changed. On a re-run,
+any slot output whose config, copy, screenshot, template, frame, theme, and tool/Chromium
+versions are all unchanged **and** whose output file is still present is skipped entirely —
+you get a `↳ cached <id>` line for each hit and a `Rendered N, cached M` summary at the end.
+
+The cache index lives at `play-screenshots/.cache/index.json` (gitignored by `init`).
+
+Use `generate --force` to bypass the cache and re-render everything (the index is still
+refreshed). Use `clean --cache` to delete the cache directory entirely.
 
 ## Output & Google Play constraints
 
@@ -174,7 +187,6 @@ The current phone export is **1080×1920**. You upload the files to Play yoursel
 - **Frames are single-color.** Each device has one real AOSP colorway (no obsidian/porcelain
   variants); a slot's `frame.color` is accepted for back-compat but ignored.
 - **Fonts:** only the system font stack; bundled/custom and non-Latin scripts are planned.
-- **No caching yet** — every `generate` re-renders.
 - **No visual editor and no Fastlane import yet.**
 
 ## Roadmap
@@ -187,7 +199,7 @@ Built milestone-by-milestone; each has a spec and a plan under
 3. ✅ **Template system** — `TemplateModule` contract (typed HTML-string modules), shared render helpers, project-local template resolver.
 4. ✅ **Device frames** — Pixel 4a/5 + Pixel 6–10 families + Pixel Tablet (19 frames), real device images from AOSP emulator skins (Apache-2.0).
 5. ⏳ **All form factors + i18n + theming + tilt** — tablets, bundled fonts, RTL, text-fit.
-6. ⏳ **Caching + Fastlane `import`.**
+6. ✅⏳ **Caching** (done) **+ Fastlane `import`** (pending).
 7. ✅ **Distribution** — npm + Homebrew shipped (manual release; see [RELEASING.md](RELEASING.md)).
 8. ⏳ **Docker + CI/CD** — a deterministic Docker image (Chromium + fonts preinstalled, for reproducible CI rendering), tag-driven automated releases (npm publish + Homebrew formula auto-bump — see [RELEASING.md](RELEASING.md) "Phase 2"), and golden snapshot tests.
 

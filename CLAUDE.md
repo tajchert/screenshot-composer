@@ -62,12 +62,17 @@ config.ts ──jiti+zod──► Config ──► render HTTP server ──Play
    - `GET /render?slot=&locale=&format=` → the composed HTML page (`src/render/compose.ts`
      → resolved `TemplateModule` via `src/templates/resolve.ts`)
    - `GET /input/<locale>/<format>/<file>` → the raw screenshot bytes (path-traversal guarded)
-4. **Render each slot** (`src/render/renderSlot.ts`): open a Playwright context at the resolved
+4. **Check the cache** (`src/render/cache.ts`): compute a SHA-256 cache key for the output
+   (covering slot config, screenshot bytes, template source, theme, resolved copy, dimensions,
+   and tool + Chromium versions) and look it up in `play-screenshots/.cache/index.json`. If
+   the key matches and the output file exists, skip rendering and print `↳ cached <id>`.
+   `generate --force` bypasses this step and always proceeds to render.
+5. **Render each slot** (`src/render/renderSlot.ts`): open a Playwright context at the resolved
    `viewport`/`deviceScaleFactor`, navigate to `/render`, wait for readiness
    (`document.fonts.ready` + all `<img>` complete + `window.__READY__`, with a 10s timeout),
    screenshot, then `enforceConstraints` (`src/render/constraints.ts`) downsizes to JPEG only
    if a PNG would exceed 8 MB.
-5. **Write** to `outputs/<locale>/<format>/<slotId>.<ext>`.
+6. **Write** to `outputs/<locale>/<format>/<slotId>.<ext>` and update the cache index.
 
 **The render-route contract (`/render?slot&locale&format`) is intentionally stable.** Templates
 are typed HTML-string modules (`TemplateModule` = `{ meta, render(props): string }`). Built-ins
@@ -94,6 +99,8 @@ same id. The route is unchanged.
 | `src/render/browser.ts` | Playwright browser singleton (**dynamic** import — see gotchas) |
 | `src/render/renderSlot.ts` | Navigate + readiness wait + screenshot + constraints |
 | `src/render/constraints.ts` | `resolveDimensions()` (phone only today), `enforceConstraints()`, `extFor()` |
+| `src/render/cache.ts` | Per-output cache key + index load/save; `cacheKeyForSlot` gathers screenshot/template/version inputs |
+| `src/render/copy.ts` | `resolveCopy()` — resolve a slot's copy for a locale with defaultLocale fallback (shared by compose + cache) |
 | `src/templates/types.ts` | `TemplateProps` / `TemplateMeta` / `TemplateModule` contract |
 | `src/templates/shared.ts` | `escapeHtml`, `backgroundCss`, device metrics + markup, readiness script |
 | `src/templates/<id>/index.ts` | A built-in template (`bold-headline`, `showcase`, `overlap`): default-exports `{ meta, render }` |
@@ -137,6 +144,10 @@ unit tests but would have broken the real CLI:
    pass a temp dir — deleting the real Chromium forces a 170 MB re-download.
 8. **Path traversal:** `server.ts` validates `/input` paths with `path.relative` containment,
    not a string `startsWith`. Keep it that way.
+9. **Cache fingerprint covers `index.ts` only for project-local templates.** `cacheKeyForSlot`
+   reads `play-screenshots/templates/<id>/index.ts` as the template source. If that template
+   imports sibling helper files, editing those helpers will **not** bust the cache. Use
+   `generate --force` as the escape hatch in that case.
 
 ## How to add a device frame (works today)
 
@@ -198,11 +209,12 @@ plan (`docs/superpowers/plans/`) → execute one milestone at a time with per-ta
 two-stage (spec + code-quality) review. When picking up the next milestone, read its plan;
 cross-milestone follow-ups raised during review are recorded as **backlog notes** at the
 bottom of the relevant plan (e.g. the M1 plan's "Milestone 2 backlog", the M2 plan's
-deferred items). Current state: **Milestones 1–4 complete**, plus **Milestone 7 (partial):
-npm + Homebrew distribution** (build pipeline + manual release; see `RELEASING.md` and
+deferred items). Current state: **Milestones 1–4 complete**, plus **M6 (partial): render
+caching** (done; Fastlane import pending), plus **Milestone 7 (partial): npm + Homebrew
+distribution** (build pipeline + manual release; see `RELEASING.md` and
 `docs/superpowers/specs/2026-05-29-track-b-distribution-design.md`). Remaining: **Milestone 5
-(form factors, theming, tilt)**, M6 (caching, Fastlane import), and M7's CI-automated
-releases + Docker.
+(form factors, theming, tilt)**, M6's Fastlane import, and M7's CI-automated releases +
+Docker.
 
 When you finish a feature, follow the same loop: keep the design doc/plan in
 `docs/superpowers/` authoritative, update README/CLAUDE if the user-facing surface or

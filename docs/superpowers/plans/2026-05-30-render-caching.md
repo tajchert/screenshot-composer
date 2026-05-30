@@ -937,3 +937,24 @@ Run `npm run cli -- generate` twice in a scratch project; the second run should 
   limitation; `--force` is the escape hatch).
 - Tablet/other form factors remain phone-only (`resolveDimensions`); caching keys already
   include `format` + dimensions, so they extend cleanly when Milestone 5 lands.
+
+## Post-implementation review notes (non-blocking)
+
+Recorded from the final comprehensive review; the feature shipped without these as they are
+either pre-existing, deliberate tradeoffs, or self-healing. Worth picking up later:
+
+- **Filter-preservation is untested end-to-end.** The loop only touches filtered identities
+  and never prunes `index.entries`, so `--slot`/`--locale`/`--format` runs preserve other
+  entries — but this (the spec's subtlest invariant) currently rests on code reading. A
+  two-slot test (render all, then run `--slot B`, assert A's entry untouched) would lock it.
+- **Multi-locale index population** is only covered single-locale; a two-locale fixture
+  asserting two distinct entries would guard against an identity-key collision regression.
+- **ext-flip stale-sibling removal** (`generate.ts`) is unverified (hard to trigger without
+  an oversized screenshot that forces a PNG→JPEG downgrade).
+- **`saveCacheIndex` temp file** is `index.json.tmp-<pid>` — safe today (sequential render
+  loop) but would collide if rendering is ever parallelized within one process; append a
+  counter/UUID then.
+- **Incremental full-index rewrite after every render** is a deliberate spec choice ("bank
+  completed work"); the file is tiny so the cost is acceptable.
+- **Tablet form factors** throw a bare `Error` from `resolveDimensions` (pre-existing); the
+  cache change just surfaces it slightly earlier in the loop. No behavior change.

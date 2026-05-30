@@ -1,10 +1,11 @@
 import path from 'node:path';
 import { existsSync } from 'node:fs';
-import type { Config, FormFactorT, Slot } from '../config/schema.js';
+import type { Config, FormFactorT } from '../config/schema.js';
 import type { ProjectPaths } from '../paths.js';
 import { loadFrame } from '../frames/load.js';
 import { resolveTemplate } from '../templates/resolve.js';
 import { resolveDimensions } from './constraints.js';
+import { resolveCopy } from './copy.js';
 import { MissingInputError, RenderError } from '../errors.js';
 
 export interface SlotRef {
@@ -19,15 +20,6 @@ export function inputUrl(locale: string, format: string, file: string): string {
 
 export function inputFilePath(paths: ProjectPaths, locale: string, format: string, file: string): string {
   return path.join(paths.inputs, locale, format, file);
-}
-
-/** Resolve every declared copy key for a locale, falling back to defaultLocale then ''. */
-export function resolveCopy(slot: Slot, locale: string, defaultLocale: string): Record<string, string> {
-  const copy: Record<string, string> = {};
-  for (const key of Object.keys(slot.copy)) {
-    copy[key] = slot.copy[key]?.[locale] ?? slot.copy[key]?.[defaultLocale] ?? '';
-  }
-  return copy;
 }
 
 export async function composeSlotHtml(config: Config, paths: ProjectPaths, ref: SlotRef): Promise<string> {

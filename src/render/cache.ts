@@ -1,12 +1,11 @@
-import { promises as fs } from 'node:fs';
-import { existsSync } from 'node:fs';
+import { promises as fs, existsSync } from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import type { Config, FormFactorT, Slot } from '../config/schema.js';
 import type { Dimensions } from './constraints.js';
 import type { ProjectPaths } from '../paths.js';
 import { resolveDimensions } from './constraints.js';
-import { resolveCopy } from './compose.js';
+import { resolveCopy } from './copy.js';
 import { versionInfo } from '../version.js';
 import { MissingInputError } from '../errors.js';
 

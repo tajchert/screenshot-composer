@@ -11,7 +11,7 @@ your repo and rendered locally with one command.
   Fastlane `screengrab`, or by hand) — this tool composes the store images, it does not
   take the screenshots, and it does not upload them to Play.
 
-> **Status: early / pre-release (`v0.1.0`).** Milestones 1–4 are done and the tool is
+> **Status: early / pre-release (`v0.2.0`).** Milestones 1–4 are done and the tool is
 > published to **npm + Homebrew** (Milestone 7, partial — see [Install](#install)): a working
 > `init` → `generate` pipeline, the config + CLI surface, the template system, and real
 > AOSP device frames. Today it renders **all three form factors** (phone, 7" and 10" tablet)

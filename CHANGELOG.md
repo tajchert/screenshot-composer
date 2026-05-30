@@ -6,6 +6,8 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [0.2.0]
+
 ### Added
 - **Form factors (Milestone 5a):** `generate` renders all three form factors — phone
   (1080×1920), 7" tablet (1920×1200), and 10" tablet (3840×2160, via `deviceScaleFactor`).
@@ -57,5 +59,6 @@ First published release. Installable from npm and Homebrew.
 - **M4 — Device frames:** 19 real AOSP emulator device frames (Pixel 4a/5, the Pixel 6–10
   families, and Pixel Tablet), redistributed under Apache-2.0.
 
-[Unreleased]: https://github.com/tajchert/screenshot-composer/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/tajchert/screenshot-composer/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/tajchert/screenshot-composer/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/tajchert/screenshot-composer/releases/tag/v0.1.0

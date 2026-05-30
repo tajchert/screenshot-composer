@@ -1,5 +1,5 @@
 import sharp from 'sharp';
-import type { FormFactorT } from '../config/schema.js';
+import type { FormFactorT, Orientation } from '../config/schema.js';
 import { ConstraintError } from '../errors.js';
 
 export interface Dimensions {
@@ -8,9 +8,25 @@ export interface Dimensions {
   scale: number;
 }
 
-export function resolveDimensions(format: FormFactorT): Dimensions {
-  if (format === 'phone') return { width: 1080, height: 1920, scale: 1 };
-  throw new Error(`Form factor '${format}' is not supported yet (Milestone 5). Use 'phone'.`);
+/**
+ * Logical viewport (template authoring size) + deviceScaleFactor for each
+ * (form factor, orientation). Logical × scale = the exported pixel size, which
+ * stays within Google Play's per-side limits and 16:9 / 9:16 aspect rules.
+ */
+export function resolveDimensions(format: FormFactorT, orientation: Orientation = 'portrait'): Dimensions {
+  const portrait = orientation === 'portrait';
+  switch (format) {
+    case 'phone':
+      return portrait ? { width: 1080, height: 1920, scale: 1 } : { width: 1920, height: 1080, scale: 1 };
+    case 'tablet7':
+      return portrait ? { width: 1200, height: 1920, scale: 1 } : { width: 1920, height: 1200, scale: 1 };
+    case 'tablet10':
+      return portrait ? { width: 1080, height: 1920, scale: 2 } : { width: 1920, height: 1080, scale: 2 };
+    default: {
+      const _exhaustive: never = format;
+      throw new Error(`Unhandled form factor: ${String(_exhaustive)}`);
+    }
+  }
 }
 
 const MAX_BYTES = 8 * 1024 * 1024;

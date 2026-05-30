@@ -2,7 +2,8 @@ import type { RenderServer } from './server.js';
 import type { FormFactorT } from '../config/schema.js';
 import type { BrowserContext } from 'playwright';
 import { getBrowser } from './browser.js';
-import { resolveDimensions, enforceConstraints } from './constraints.js';
+import { enforceConstraints } from './constraints.js';
+import { resolveRenderTarget } from './target.js';
 import { RenderError } from '../errors.js';
 
 export async function renderSlot(
@@ -11,7 +12,9 @@ export async function renderSlot(
   locale: string,
   format: FormFactorT,
 ): Promise<Buffer> {
-  const { width, height, scale } = resolveDimensions(format);
+  const slot = server.config.slots.find((s) => s.id === slotId);
+  if (!slot) throw new RenderError(`No slot with id '${slotId}' in config`);
+  const { width, height, scale } = resolveRenderTarget(slot, format);
   const browser = await getBrowser();
   let context: BrowserContext | undefined;
 

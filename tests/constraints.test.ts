@@ -4,11 +4,20 @@ import { resolveDimensions, enforceConstraints } from '../src/render/constraints
 import { ConstraintError } from '../src/errors.js';
 
 describe('resolveDimensions', () => {
-  it('returns 1080x1920 @1x for phone', () => {
+  it('phone portrait (default) is 1080x1920 @1x', () => {
     expect(resolveDimensions('phone')).toEqual({ width: 1080, height: 1920, scale: 1 });
+    expect(resolveDimensions('phone', 'portrait')).toEqual({ width: 1080, height: 1920, scale: 1 });
   });
-  it('throws for unsupported form factors in this milestone', () => {
-    expect(() => resolveDimensions('tablet10')).toThrow(/not supported yet/);
+  it('phone landscape is 1920x1080 @1x', () => {
+    expect(resolveDimensions('phone', 'landscape')).toEqual({ width: 1920, height: 1080, scale: 1 });
+  });
+  it('tablet7 landscape is 1920x1200 @1x; portrait is 1200x1920 @1x', () => {
+    expect(resolveDimensions('tablet7', 'landscape')).toEqual({ width: 1920, height: 1200, scale: 1 });
+    expect(resolveDimensions('tablet7', 'portrait')).toEqual({ width: 1200, height: 1920, scale: 1 });
+  });
+  it('tablet10 landscape is 1920x1080 @2x; portrait is 1080x1920 @2x', () => {
+    expect(resolveDimensions('tablet10', 'landscape')).toEqual({ width: 1920, height: 1080, scale: 2 });
+    expect(resolveDimensions('tablet10', 'portrait')).toEqual({ width: 1080, height: 1920, scale: 2 });
   });
 });
 

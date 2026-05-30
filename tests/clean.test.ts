@@ -4,6 +4,7 @@ import os from 'node:os';
 import { promises as fs, existsSync } from 'node:fs';
 import { runClean } from '../src/commands/clean.js';
 import { projectPaths } from '../src/paths.js';
+import { saveCacheIndex, loadCacheIndex, CACHE_INDEX_VERSION } from '../src/render/cache.js';
 
 async function makeFixture() {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'sc-clean-'));
@@ -32,5 +33,16 @@ describe('runClean', () => {
     expect(existsSync(p.cache)).toBe(false);
     expect(existsSync(chromiumDir)).toBe(true);
     expect(removed.map((r) => r.path)).toEqual([p.cache]);
+  });
+
+  it('clears a populated cache index with --cache', async () => {
+    const { root, p, chromiumDir } = await makeFixture();
+    await saveCacheIndex(p.cache, {
+      version: CACHE_INDEX_VERSION,
+      entries: { 'en-US/phone/01': { key: 'k', ext: 'png' } },
+    });
+    await runClean(root, { cache: true }, chromiumDir);
+    expect(existsSync(p.cache)).toBe(false);
+    expect(await loadCacheIndex(p.cache)).toEqual({ version: CACHE_INDEX_VERSION, entries: {} });
   });
 });

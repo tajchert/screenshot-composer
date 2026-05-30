@@ -24,6 +24,7 @@ describe('DEFAULT_ORIENTATION', () => {
 describe('resolveOrientation', () => {
   it('falls back to the per-form-factor default when unset', () => {
     expect(resolveOrientation(slot(), 'phone')).toBe('portrait');
+    expect(resolveOrientation(slot(), 'tablet7')).toBe('landscape');
     expect(resolveOrientation(slot(), 'tablet10')).toBe('landscape');
   });
   it('honors a per-form-factor override', () => {

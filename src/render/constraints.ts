@@ -11,7 +11,7 @@ export interface Dimensions {
 /**
  * Logical viewport (template authoring size) + deviceScaleFactor for each
  * (form factor, orientation). Logical × scale = the exported pixel size, which
- * stays within Google Play's 320–7680 side range and 16:9 / 9:16 aspect rules.
+ * stays within Google Play's per-side limits and 16:9 / 9:16 aspect rules.
  */
 export function resolveDimensions(format: FormFactorT, orientation: Orientation = 'portrait'): Dimensions {
   const portrait = orientation === 'portrait';

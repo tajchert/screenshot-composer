@@ -33,6 +33,23 @@ npx tsx ../src/cli.ts generate
 
 Outputs land in `outputs/<locale>/phone/<slotId>.png`.
 
+### Caching
+
+`generate` caches each output and only re-renders what changed. Run it a second time and
+every slot is skipped — you'll see `↳ cached <id>` lines and a `Rendered 0, cached 16`
+summary. Use `--force` to bypass the cache:
+
+```bash
+npx tsx ../src/cli.ts generate          # second run → Rendered 0, cached 16
+npx tsx ../src/cli.ts generate --force  # re-render everything
+```
+
+Edit one headline and only that slot's outputs re-render. The cache index lives at
+`play-screenshots/.cache/index.json` (gitignored).
+
+> **On a tablet?** See the companion [tablet showcase](../tablet/play-screenshots/README.md)
+> for the `tablet7`/`tablet10` form factors and the `orientation` field (new in v0.2.0).
+
 ## Files
 
 - `screenshot-composer.config.ts` — the 8-slot showcase config.
